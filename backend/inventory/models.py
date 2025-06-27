@@ -31,7 +31,7 @@ class Item(models.Model):
     ]
     name = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField(null=False, blank=False)
-    image_url = models.URLField(blank=True, null=True)
+    item_image = models.ImageField(blank=True, null=True, upload_to='item_images/')
     location = models.CharField(max_length=255, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, null=True, blank=True)
