@@ -1,7 +1,9 @@
 'use client';
 
 import DashboardLayout from "@/components/uix/dashboardLayout";
-import { Dashboard } from "@/components/views/Dashboard";
+import { MatchNotifications } from "@/components/views/MatchNotifications";
+
+
 
 export default function Page () {
 
@@ -9,7 +11,7 @@ export default function Page () {
     
       <DashboardLayout>
         <div className="p-6">
-            <Dashboard userRole="manager"/>
+            <MatchNotifications userRole="manager"/>
         </div>
       </DashboardLayout>
   )

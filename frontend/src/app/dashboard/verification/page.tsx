@@ -1,16 +1,15 @@
 'use client';
 
 import DashboardLayout from "@/components/uix/dashboardLayout";
-import { Dashboard } from "@/components/views/Dashboard";
+import { VerificationQuestions } from "@/components/views/VerificationQuestions";
 
 export default function Page () {
 
-  return (
-    
+    return (
       <DashboardLayout>
         <div className="p-6">
-            <Dashboard userRole="manager"/>
+            <VerificationQuestions userRole='manager'/>
         </div>
       </DashboardLayout>
-  )
+    )
 }
