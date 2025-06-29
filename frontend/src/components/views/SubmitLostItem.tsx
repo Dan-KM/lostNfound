@@ -24,7 +24,6 @@ export const SubmitLostItem = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast("Lost Item Report Submitted",{
-
       description: "Your report has been submitted successfully. We'll notify you of any matches.",
     });
     setFormData({
@@ -154,11 +153,35 @@ export const SubmitLostItem = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-orange-600 hover:bg-orange-700">
+            <Button type="submit" className="w-full bg-orange-600 hover:bg-orange-700"
+            onClick={() => {
+               toast("Event has been created", {
+                description: "Sunday, December 03, 2023 at 9:00 AM",
+                action: {
+                  label: "Undo",
+                  onClick: () => console.log("Undo"),
+                },
+              });
+            }}
+            >
               Submit Lost Item Report
             </Button>
           </form>
         </CardContent>
+      <Button
+                variant="outline"
+                onClick={() =>
+                  toast("Event has been created", {
+                    description: "Sunday, December 03, 2023 at 9:00 AM",
+                    action: {
+                      label: "Undo",
+                      onClick: () => console.log("Undo"),
+                    },
+                  })
+                }
+              >
+                Show Toast
+              </Button>
       </Card>
     </div>
   );

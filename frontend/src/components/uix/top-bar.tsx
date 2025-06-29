@@ -14,7 +14,7 @@ export const TopBar = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   return (
     <>
-        <header className="bg-white border-b border-slate-200 px-6 py-2 sticky top-0 z-50">
+        <header className="bg-white border-b border-slate-200 px-6 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
           <div className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
