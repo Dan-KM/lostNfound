@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '../ui/sidebar';
 import { Separator } from '../ui/separator';
 
+import { NavUser } from './nav-user'; 
+
 
 export const TopBar = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
@@ -40,10 +42,13 @@ export const TopBar = () => {
             3
           </Badge>
               </Button>
-              
-              <Button variant="ghost" size="sm">
-          <User className="h-5 w-5" />
-              </Button>
+              <NavUser user={
+                {
+                  "name": "Daniel K",
+                  "email": "email@email.com",
+                  "avatar":''
+                }
+              }/>
             </div>
           </div>
         </header>

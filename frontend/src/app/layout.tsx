@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Navigation } from "lucide-react";
-import { NavigationProvider } from "@/hooks/useNavigationContenxt";
+
+import { AuthProvider } from "@/hooks/useAuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,9 +29,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NavigationProvider>
+        <div className="this is the main layout">
+          <AuthProvider>
           {children}
-        </NavigationProvider>
+        </AuthProvider>
+        </div>
       </body>
     </html>
   );
