@@ -1,0 +1,42 @@
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.tsx'
+
+import {  createBrowserRouter, RouterProvider } from 'react-router-dom'
+import LoginPage from './components/views/auth/login.tsx'
+import AuthProvider from './hooks/useAuthProvider.tsx'
+import ProtectedRoutes from './hooks/protectedRoutes.tsx'
+import Admin from '@/components/views/dashboard/dashboard-view'
+import EmailApp from './components/views/dashboard/test.tsx'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App/>,
+  },
+  {
+    path: '/auth/login',
+    element: <LoginPage/>
+  },
+  // {
+  //   path: '/dashboard',
+  //   element: <ProtectedRoutes allowedRoles={['admin']}><div>Dashboard</div></ProtectedRoutes>
+  // },
+  {
+    path: '/dashboard',
+    element: <Admin/>
+  },
+  {
+    path: '/test',
+    element: <EmailApp/>
+  },
+])
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <AuthProvider>
+      <RouterProvider router={router}/>
+    </AuthProvider>
+  </StrictMode>,
+)

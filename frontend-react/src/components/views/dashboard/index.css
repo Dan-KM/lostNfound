@@ -1,0 +1,166 @@
+/* Base Styles */
+.email-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.app-header {
+  background-color: #1a73e8;
+  color: white;
+  padding: 10px 20px;
+}
+
+.app-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 200px;
+  background-color: #f6f8fc;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+}
+
+.compose-button {
+  background-color: #c2e7ff;
+  color: #001d35;
+  border: none;
+  border-radius: 16px;
+  padding: 12px 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.compose-button:hover {
+  background-color: #a8d8f8;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  padding: 8px 12px;
+  border-radius: 0 16px 16px 0;
+  cursor: pointer;
+}
+
+.sidebar li:hover {
+  background-color: #e8eaed;
+}
+
+.sidebar li.active {
+  background-color: #d3e3fd;
+  font-weight: bold;
+}
+
+/* Email List Styles */
+.email-list {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.email-item {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.email-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* Compose Window Styles */
+.compose-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.compose-window {
+  width: 600px;
+  height: 70vh;
+  background-color: white;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.compose-header {
+  padding: 12px 16px;
+  background-color: #f2f6fc;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.compose-window form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px;
+}
+
+.compose-window input,
+.compose-window textarea {
+  border: none;
+  border-bottom: 1px solid #ddd;
+  padding: 12px 8px;
+  margin-bottom: 8px;
+  outline: none;
+}
+
+.compose-window textarea {
+  flex: 1;
+  resize: none;
+  border: none;
+}
+
+.compose-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 12px;
+}
+
+.send-button {
+  background-color: #0b57d0;
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.send-button:hover {
+  background-color: #0a4fba;
+}
