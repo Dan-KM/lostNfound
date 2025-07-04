@@ -4,11 +4,11 @@ import './index.css'
 import App from './App.tsx'
 
 import {  createBrowserRouter, RouterProvider } from 'react-router-dom'
-import LoginPage from './components/views/auth/login.tsx'
+import LoginPage from '@/page/auth/login.tsx'
 import AuthProvider from './hooks/useAuthProvider.tsx'
-import ProtectedRoutes from './hooks/protectedRoutes.tsx'
-import Admin from '@/components/views/dashboard/dashboard-view'
-import EmailApp from './components/views/dashboard/test.tsx'
+// import ProtectedRoutes from './hooks/protectedRoutes.tsx'
+import Admin from '@/page/DashboardPage'
+import EmailApp from '@/page/dashboard/test'
 
 const router = createBrowserRouter([
   {

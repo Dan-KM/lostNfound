@@ -4,8 +4,8 @@ import DashboardHome from "@/components/views/dashboard-home"
 import Matches from "@/components/views/matches"
 import Verification from "@/components/views/verification"
 import ManagerTools from "@/components/views/manager-tools"
-import ReportLost from "@/components/views/item-submission"
-import ReportFound from "@/components/views/item-submission"
+
+import { SubmitItem as SubmitLostItem } from "@/components/views/item-submission"
 import Notifications from "@/components/views/Notifications"
 import NotFound from "@/components/views/NotFound"
 import DashboardLayout from "@/components/uix/dashboard-layout"
@@ -43,9 +43,9 @@ function page() {
       case "manager":
         return <ManagerTools />
       case "submit-lost":
-        return <ReportLost />
+        return <SubmitLostItem />
       case "submit-found":
-        return <ReportFound />
+        return <SubmitLostItem />
       case "notifications":
         return <Notifications />
       default:
