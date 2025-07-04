@@ -1,3 +1,48 @@
+// // 'use client';
+// // import { AppSidebar } from "@/components/uix/app-sidebar"
+// // import {
+// //   SidebarInset,
+// //   SidebarProvider,
+// // } from "@/components/ui/sidebar"
+// // import { TopBar } from "./top-bar"
+// // import { useAuthContext } from "@/hooks/useAuthContext";
+// // // import { useRouter } from "next/router";
+// // import { useRouter } from "next/navigation";
+
+
+// // interface dashboardProps {
+// //   title?: string;
+// //   description?: string;
+// // }
+
+// // export default function Page({props, children }: {props?:dashboardProps, children: React.ReactNode;}) {
+// //   const router = useRouter();
+// //   const [[isAuthenticated, setIsAuthenticated], [permission, setPermission]] = useAuthContext()
+// //   if(!isAuthenticated){
+// //     router.push('/Auth//login')
+// //   }
+// //   return (
+// //     <SidebarProvider>
+// //       <AppSidebar />
+// //       <SidebarInset>
+// //         <TopBar />
+// //         <div>
+// //             {props && (
+// //               <div>
+// //               <h1 className="text-2xl font-semibold text-slate-800">{props.title}</h1>
+// //               <p className="mt-2 text-sm text-slate-600">
+// //                 {props.description}
+// //               </p>  
+// //             </div>
+// //             )}
+// //           {children}
+// //         </div>
+// //       </SidebarInset>
+// //     </SidebarProvider> 
+// //   )
+// // }
+
+
 // 'use client';
 // import { AppSidebar } from "@/components/uix/app-sidebar"
 // import {
@@ -6,42 +51,45 @@
 // } from "@/components/ui/sidebar"
 // import { TopBar } from "./top-bar"
 // import { useAuthContext } from "@/hooks/useAuthContext";
-// // import { useRouter } from "next/router";
-// import { useRouter } from "next/navigation";
-
+// import { useRouter } from "next/navigation"; // ✅ Correct import
+// import { useEffect } from "react";
 
 // interface dashboardProps {
 //   title?: string;
 //   description?: string;
 // }
 
-// export default function Page({props, children }: {props?:dashboardProps, children: React.ReactNode;}) {
+// export default function Page({ props, children }: { props?: dashboardProps, children: React.ReactNode }) {
 //   const router = useRouter();
 //   const [[isAuthenticated, setIsAuthenticated], [permission, setPermission]] = useAuthContext()
-//   if(!isAuthenticated){
-//     router.push('/Auth//login')
-//   }
+
+//   // ❗Don't run redirect during render – it causes hydration mismatch
+//   useEffect(() => {
+//     if (!isAuthenticated) {
+//       router.push('/auth/login') // also: fix double slash
+//     }
+//   }, [isAuthenticated, router])
+
 //   return (
 //     <SidebarProvider>
 //       <AppSidebar />
 //       <SidebarInset>
 //         <TopBar />
 //         <div>
-//             {props && (
-//               <div>
+//           {props && (
+//             <div>
 //               <h1 className="text-2xl font-semibold text-slate-800">{props.title}</h1>
 //               <p className="mt-2 text-sm text-slate-600">
 //                 {props.description}
-//               </p>  
+//               </p>
 //             </div>
-//             )}
+//           )}
 //           {children}
 //         </div>
 //       </SidebarInset>
-//     </SidebarProvider> 
+//     </SidebarProvider>
 //   )
 // }
-
 
 'use client';
 import { AppSidebar } from "@/components/uix/app-sidebar"
@@ -50,9 +98,7 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { TopBar } from "./top-bar"
-import { useAuthContext } from "@/hooks/useAuthContext";
-import { useRouter } from "next/navigation"; // ✅ Correct import
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface dashboardProps {
   title?: string;
@@ -61,15 +107,25 @@ interface dashboardProps {
 
 export default function Page({ props, children }: { props?: dashboardProps, children: React.ReactNode }) {
   const router = useRouter();
-  const [[isAuthenticated, setIsAuthenticated], [permission, setPermission]] = useAuthContext()
+  // const [[isAuthenticated], [permission]] = useAuthContext()
 
-  // ❗Don't run redirect during render – it causes hydration mismatch
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/Auth/login') // also: fix double slash
-    }
-  }, [isAuthenticated, router])
+  // useEffect(() => {
+  //   if (isAuthenticated === false) {
+  //     router.push('/auth/login')
+  //   }
+  // }, [isAuthenticated, router])
 
+  // // 1. Block rendering while checking
+  // if (isAuthenticated === null || isAuthenticated === undefined) {
+  //   return null // or return a <Loader />
+  // }
+
+  // // 2. Block rendering after redirect trigger
+  // if (isAuthenticated === false) {
+  //   return null
+  // }
+
+  // 3. User is authenticated — render protected content
   return (
     <SidebarProvider>
       <AppSidebar />

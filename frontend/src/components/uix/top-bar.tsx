@@ -10,10 +10,12 @@ import { SidebarTrigger } from '../ui/sidebar';
 import { Separator } from '../ui/separator';
 
 import { NavUser } from './nav-user'; 
+import { useAuth } from '@/hooks/useAuthProvider';
 
 
 export const TopBar = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
+  const { currentUser } = useAuth()
   return (
     <>
         <header className="bg-white border-b border-slate-200 px-6 py-2">
@@ -42,13 +44,11 @@ export const TopBar = () => {
             3
           </Badge>
               </Button>
-              <NavUser user={
-                {
-                  "name": "Daniel K",
-                  "email": "email@email.com",
-                  "avatar":''
-                }
-              }/>
+              <NavUser user={{
+                  name: currentUser?.first_name ?? "",
+                  email: currentUser?.email?? "",
+                  avatar: ''
+                }} />
             </div>
           </div>
         </header>

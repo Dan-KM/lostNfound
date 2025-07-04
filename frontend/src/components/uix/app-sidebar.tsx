@@ -21,8 +21,7 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar"
-
-import { useNavigationContext } from "@/hooks/useNavigationContenxt";
+import { useAuth } from "@/hooks/useAuthProvider"
 
 const data = {
     navMain: [
@@ -73,6 +72,8 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { open } = useSidebar()
+  const { currentUser }= useAuth()
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -98,7 +99,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={data.navMain}/>
       </SidebarContent>
       <SidebarFooter>
       </SidebarFooter>

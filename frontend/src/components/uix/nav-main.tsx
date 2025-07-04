@@ -12,16 +12,16 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 
-
-const NavMain = ({
-  items,
-}: {
-  items: {
-    title: string
-    url: string
-    icon?: LucideIcon
+type MainNavProps = {
+  items : {
+    title: string,
+    url: string,
+    icon: LucideIcon,
+    isActive : boolean
   }[]
-}) => {
+}
+
+const NavMain = ({items}: MainNavProps) => {
   const pathname = usePathname()
 
   return (

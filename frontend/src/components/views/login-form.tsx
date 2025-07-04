@@ -7,9 +7,9 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { Package } from "lucide-react"
 import { API } from "@/lib/API"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation";
-import { useAuthContext } from "@/hooks/useAuthContext";
+import { useAuth } from "@/hooks/useAuthProvider";
 
 export function LoginForm({
   className,
@@ -21,27 +21,65 @@ export function LoginForm({
     );
     
     const router = useRouter();
-    const [[isAuthenticated, setIsAuthenticated], [permission, setPermission]] = useAuthContext()
+    // const [[isAuthenticated, setIsAuthenticated], [permission, setPermission]] = useAuthContext()
+
+    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault()
+    //     if(formData.email && formData.password){
+    //         console.log('login formdata =>', formData);
+    //         try{
+    //             const response = await API.post(
+    //                 '/auth/token/',
+    //                 formData
+    //             )
+    //             console.log('response =>', response.data);
+    //             localStorage.setItem('accessToken', response.data.access)
+    //             localStorage.setItem('refreshToken', response.data.refresh)
+    //             setIsAuthenticated(true)
+    //             router.push('/dashboard')
+    //         }catch(error){
+    //             console.error(error)
+    //         }
+    //     }
+    // }
+    const {handleLogin, currentUser, authToken} = useAuth()
+
+    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault()
+    //     if(formData.email && formData.password){
+    //         console.log('login formdata =>', formData);
+    //         try{
+    //             await handleLogin(formData)
+    //             // router.push('/dashboard')
+    //         }catch(error){
+    //             console.error(error)
+    //         }
+
+    //         console.log('currentUser ->', currentUser);
+    //         console.log('in the login form authToken ->', authToken);
+    //     }
+    // }
+    const [loginComplete, setLoginComplete] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if(formData.email && formData.password){
-            console.log('login formdata =>', formData);
             try{
-                const response = await API.post(
-                    '/auth/token/',
-                    formData
-                )
-                console.log('response =>', response.data);
-                localStorage.setItem('accessToken', response.data.access)
-                localStorage.setItem('refreshToken', response.data.refresh)
-                setIsAuthenticated(true)
-                router.push('/dashboard')
+                await handleLogin(formData)
+                setLoginComplete(true)
             }catch(error){
                 console.error(error)
             }
         }
     }
+
+    useEffect(() => {
+        if (loginComplete) {
+            console.log('currentUser after login ->', currentUser)
+            console.log('authToken after login ->', authToken)
+        }
+    }, [loginComplete, currentUser, authToken])
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
