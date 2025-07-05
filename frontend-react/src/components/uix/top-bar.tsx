@@ -1,12 +1,12 @@
 import { useState } from 'react'
-// import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import {
   Bell, 
   User,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { SidebarTrigger } from '../ui/sidebar';
-import { Separator } from '../ui/separator';
+import { SidebarTrigger } from '@/components/ui/sidebar';
+import { Separator } from '@/components/ui/separator';
 
 // import { NavUser } from './nav-user'; 
 import { useAuth } from '@/hooks/useAuthProvider';
@@ -39,9 +39,9 @@ export const TopBar = () => {
           onClick={() => setActiveSection("notifications")}
               >
           <Bell className="h-5 w-5" />
-          {/* <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-red-500">
+          <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-red-500">
             3
-          </Badge> */}
+          </Badge>
               </Button>
               {/* <NavUser user={{
                   name: currentUser?.first_name ?? "",

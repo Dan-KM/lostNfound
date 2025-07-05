@@ -16,11 +16,15 @@ function page() {
   // Handle hash changes
     useEffect(() => {
       const checkHash = () => {
-        const hash = window.location.hash;
-        // setShowCompose(hash.includes('compose'));
-        setActiveView(hash.substring(1))
-        // console.log(hash.substring(1));
+        const hash = window.location.hash.substring(1);
 
+        const [path, query] = hash.split('?');
+  
+        const segments = path.split('/');
+        
+        console.log('segment', segments);
+
+        setActiveView(segments[0])
       };
   
       // Initial check
