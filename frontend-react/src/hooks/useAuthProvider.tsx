@@ -81,7 +81,7 @@ export default function AuthProvider ({ children }: AuthProviderProps ) {
                     first_name : "Daniel",
                     last_name : "Kasereka",
                     email : "email",
-                    user_role : "admin",
+                    user_role : "manager",
                 })
             }catch{
                 setCurrentUser(null)

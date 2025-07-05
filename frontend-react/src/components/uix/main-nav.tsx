@@ -30,7 +30,7 @@ const data = {
       id: "dashboard",
       title: "Dashboard",
       icon: HomeIcon,
-      allowedRoles: ["admin", "manager"],
+      allowedRoles: ["__all__"],
     },
     {
       id: "matches",

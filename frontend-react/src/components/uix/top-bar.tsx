@@ -17,7 +17,7 @@ export const TopBar = () => {
   const { currentUser } = useAuth()
   return (
     <>
-        <header className="bg-white border-b border-slate-200 px-6 py-2">
+        <header className="bg-white border-b border-slate-200 px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
           <div className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">

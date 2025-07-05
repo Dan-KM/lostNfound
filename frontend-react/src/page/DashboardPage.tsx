@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import DashboardHome from "@/components/views/dashboard-home"
+import { Dashboard } from "@/components/views/dashboard-home"
 import Matches from "@/components/views/matches"
 import Verification from "@/components/views/verification"
 import ManagerTools from "@/components/views/manager-tools"
@@ -35,7 +35,7 @@ function page() {
   const renderView = () => {
     switch (activeView) {
       case "dashboard":
-        return <DashboardHome />
+        return <Dashboard />
       case "matches":
         return <Matches />
       case "verification":
