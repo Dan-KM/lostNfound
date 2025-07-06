@@ -18,10 +18,10 @@ from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
-# class CustomUserView(viewsets.ReadOnlyModelViewSet):
-#     queryset = CustomUser.objects.all()
-#     serializer_class = CustomUserSerializer
-#     lookup_field = 'pk'
+class CustomUserView(viewsets.ReadOnlyModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    lookup_field = 'pk'
 
 #     def get (self, request):
 

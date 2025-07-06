@@ -1,0 +1,170 @@
+[
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "admin@example.com",
+            "first_name": "John",
+            "last_name": "Doe",
+            "phone_number": "+1234567890",
+            "user_role": "admin",
+            "user_image": "user_images/admin.jpg",
+            "is_active": true,
+            "is_staff": true,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    },
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "manager@example.com",
+            "first_name": "Jane",
+            "last_name": "Smith",
+            "phone_number": "+1987654321",
+            "user_role": "manager",
+            "user_image": "user_images/manager.jpg",
+            "is_active": true,
+            "is_staff": true,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    },
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "finder@example.com",
+            "first_name": "Mike",
+            "last_name": "Johnson",
+            "phone_number": "+1122334455",
+            "user_role": "finder",
+            "user_image": null,
+            "is_active": true,
+            "is_staff": false,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    },
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "claimant@example.com",
+            "first_name": "Sarah",
+            "last_name": "Williams",
+            "phone_number": "+1555666777",
+            "user_role": "claimant",
+            "user_image": null,
+            "is_active": true,
+            "is_staff": false,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    },
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "inactive@example.com",
+            "first_name": "Robert",
+            "last_name": "Brown",
+            "phone_number": "+1444555666",
+            "user_role": "claimant",
+            "user_image": null,
+            "is_active": false,
+            "is_staff": false,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    },
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "tech.support@example.com",
+            "first_name": "Alex",
+            "last_name": "Chen",
+            "phone_number": "+1888999000",
+            "user_role": "admin",
+            "user_image": "user_images/tech_support.jpg",
+            "is_active": true,
+            "is_staff": true,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    },
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "library.manager@university.edu",
+            "first_name": "Emily",
+            "last_name": "Rodriguez",
+            "phone_number": "+12223334444",
+            "user_role": "manager",
+            "user_image": "user_images/library_manager.jpg",
+            "is_active": true,
+            "is_staff": true,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    },
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "student.finder@university.edu",
+            "first_name": "David",
+            "last_name": "Kim",
+            "phone_number": "+13334445555",
+            "user_role": "finder",
+            "user_image": null,
+            "is_active": true,
+            "is_staff": false,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    },
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "lost.wallet@example.com",
+            "first_name": "Sophia",
+            "last_name": "Martinez",
+            "phone_number": "+16667778888",
+            "user_role": "claimant",
+            "user_image": "user_images/sophia_profile.jpg",
+            "is_active": true,
+            "is_staff": false,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    },
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "international@student.edu",
+            "first_name": "Mohammed",
+            "last_name": "Ali",
+            "phone_number": "+17778889999",
+            "user_role": "claimant",
+            "user_image": null,
+            "is_active": true,
+            "is_staff": false,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    },
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "security@campus.edu",
+            "first_name": "James",
+            "last_name": "Wilson",
+            "phone_number": "+19991112222",
+            "user_role": "manager",
+            "user_image": "user_images/security_officer.jpg",
+            "is_active": true,
+            "is_staff": true,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    },
+    {
+        "model": "accounts.CustomUser",
+        "fields": {
+            "email": "found.phone@example.com",
+            "first_name": "Olivia",
+            "last_name": "Brown",
+            "phone_number": "+14445556666",
+            "user_role": "finder",
+            "user_image": "user_images/olivia_photo.jpg",
+            "is_active": true,
+            "is_staff": false,
+            "password": "pbkdf2_sha256$1000000$WpXz37aM4DEbCSUuajqpb2$QSLnjQ6NV3RAuaqRYzb5oFfWrVIomijKmFKjyXGm4nU="
+        }
+    }
+]
