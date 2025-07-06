@@ -38,7 +38,7 @@ function page() {
 
   const renderView = () => {
     switch (activeView) {
-      case "dashboard":
+      case "home":
         return <Dashboard />
       case "matches":
         return <Matches />

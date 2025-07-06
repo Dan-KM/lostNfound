@@ -7,7 +7,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm md:max-w-3xl">
         <LoginForm />
       </div>
-      <Link to='/dashboard'>dashboard</Link>
+      {/* <Link to='/dashboard'>dashboard</Link> */}
     </div>
   )
 }

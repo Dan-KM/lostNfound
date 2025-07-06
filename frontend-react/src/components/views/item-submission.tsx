@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Upload, ChevronDownIcon, MapPin, Package } from "lucide-react";
+import { Upload, ChevronDownIcon, MapPin, Package, CircleGauge } from "lucide-react";
 import { toast } from "sonner";
 import { CategorySelect } from '@/components/uix/categorySelect'
 import {
@@ -16,12 +16,15 @@ import {
 import { Calendar } from "@/components/ui/calendar"
 import { useAuth } from "@/hooks/useAuthProvider";
 import ProtectedRoutes from "@/hooks/protectedRoutes";
+import { API } from "@/lib/API";
+import { PopupWindow } from "../uix/popup-window";
+import type { AxiosResponse } from "axios";
 
 export const SubmitItem = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    type: "",
+    item_type: "",
     location: "",
     category: 0,
     subcategory: 0,
@@ -35,18 +38,31 @@ export const SubmitItem = () => {
   const {currentUser} = useAuth()
     
   const [currentUserRole, setCurrentUserRole] = useState<string | null>()
+
+  const [apiResponse, setApiResponse] = useState<AxiosResponse | null>()
   
     useEffect(() => {
       if(currentUser)
         setCurrentUserRole(currentUser.user_role)
     }, [currentUser])
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (formData.reported_date && formData.category && formData.subcategory && formData.name && formData.description && formData.location) {
-      formData.type = (currentUserRole == 'claimant'? 'lost' : 'found')
+
+      formData.item_type = (currentUserRole == 'claimant'? 'lost' : 'found')
       console.log('formdata ==> ', formData);
+      try {
+        const response = await API.post(
+          'inventory/items/',
+          JSON.stringify(formData)
+        )
+        setApiResponse(response)
+
+      } catch (error) {
+        console.error(error)
+      }
     }
     else{
       toast.error("Please fill all required fields and select a date.");
@@ -65,9 +81,20 @@ export const SubmitItem = () => {
   };
 
   return (
-    <ProtectedRoutes allowedRoles={['claimant', 'finder']}>
-      <div className="max-w-2xl mx-auto">
-        <Card className="bg-white shadow-sm border border-slate-200">
+    <ProtectedRoutes allowedRoles={['admin','claimant', 'finder']}>
+      {apiResponse && (
+        <>
+          <PopupWindow handleCloseWindow={() => {
+            setApiResponse(null)
+          }}>
+            <h2>
+              {apiResponse.data.serial_id}
+            </h2>
+          </PopupWindow>
+        </>
+      )}
+      <div className="max-w-2xl mx-auto min-h-[90svh] grid items-center">
+        <Card className="bg-white shadow-sm border border-slate-200 m-4">
           <CardHeader>
             {currentUserRole ==='claimant'? (
               <>
@@ -93,7 +120,7 @@ export const SubmitItem = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div className="space-y-2">
                   <Label htmlFor="name">Item Name <span className="text-red-500">*</span></Label>
                   <Input

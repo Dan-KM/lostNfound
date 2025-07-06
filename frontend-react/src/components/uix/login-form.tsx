@@ -8,10 +8,16 @@ import { Package } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useAuth } from "@/hooks/useAuthProvider";
 
+import { useNavigate } from 'react-router-dom';
+
+  
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+
+    const navigate = useNavigate();
 
     const [formData, seFormData] = useState(
         {email:'', password:''}
@@ -37,6 +43,7 @@ export function LoginForm({
         if (loginComplete) {
             console.log('currentUser after login ->', currentUser)
             console.log('authToken after login ->', authToken)
+            navigate('/dashboard#home', { replace: true });
         }
     }, [loginComplete, currentUser, authToken])
 

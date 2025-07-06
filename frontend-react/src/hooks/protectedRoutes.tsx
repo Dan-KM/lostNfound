@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from "react"
+import { useEffect, type PropsWithChildren } from "react"
 import { useAuth } from "./useAuthProvider"
 import PermissionDenied from "@/components/uix/permission-denied"
 
@@ -7,18 +7,27 @@ type ProtectedRoutesProps = PropsWithChildren & {
 }
 
 export default function ProtectedRoutes ({children, allowedRoles} : ProtectedRoutesProps ){
-    const { currentUser } = useAuth()
+    const { currentUser, getUser } = useAuth()
 
-    if(currentUser === undefined){
-        return <><div>Loading...</div></>
-    }
-    
-    if(currentUser === null){
-        return <PermissionDenied/>
-    }
+    // useEffect(()=>{
+    //     async function s(){
+    //         await getUser()
+    //     }
+    //     s()
+    // },[])
 
-    if (currentUser && allowedRoles && !allowedRoles.includes(currentUser.user_role)){
-        return <PermissionDenied/>
+    if (!allowedRoles?.includes("__all__")) {
+        if(currentUser === undefined){
+            return <><div>Loading...</div></>
+        }
+        
+        if(currentUser === null){
+            return <PermissionDenied/>
+        }
+
+        if (currentUser && allowedRoles && !allowedRoles.includes(currentUser.user_role)){
+            return <PermissionDenied/>
+        }
     }
 
     return children

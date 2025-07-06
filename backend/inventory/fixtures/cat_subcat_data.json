@@ -1,0 +1,647 @@
+[
+  {
+    "model": "inventory.category",
+    "pk": 1,
+    "fields": {
+      "name": "Electronics"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 2,
+    "fields": {
+      "name": "Clothing"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 3,
+    "fields": {
+      "name": "Bags & Accessories"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 4,
+    "fields": {
+      "name": "Books & Academic Materials"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 5,
+    "fields": {
+      "name": "Personal Items"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 6,
+    "fields": {
+      "name": "Sports & Recreation"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 7,
+    "fields": {
+      "name": "Food & Beverages"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 8,
+    "fields": {
+      "name": "Transportation"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 9,
+    "fields": {
+      "name": "Documents & Cards"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 10,
+    "fields": {
+      "name": "Jewelry & Watches"
+    }
+  },
+  {
+    "model": "inventory.category",
+    "pk": 11,
+    "fields": {
+      "name": "Miscellaneous"
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 1,
+    "fields": {
+      "name": "Phones",
+      "category": 1
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 2,
+    "fields": {
+      "name": "Laptops",
+      "category": 1
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 3,
+    "fields": {
+      "name": "Tablets",
+      "category": 1
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 4,
+    "fields": {
+      "name": "Headphones/Earbuds",
+      "category": 1
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 5,
+    "fields": {
+      "name": "Chargers",
+      "category": 1
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 6,
+    "fields": {
+      "name": "Calculators",
+      "category": 1
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 7,
+    "fields": {
+      "name": "Smart Watches",
+      "category": 1
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 8,
+    "fields": {
+      "name": "USB Drives",
+      "category": 1
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 9,
+    "fields": {
+      "name": "Jackets",
+      "category": 2
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 10,
+    "fields": {
+      "name": "Hoodies/Sweatshirts",
+      "category": 2
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 11,
+    "fields": {
+      "name": "Hats/Caps",
+      "category": 2
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 12,
+    "fields": {
+      "name": "Scarves",
+      "category": 2
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 13,
+    "fields": {
+      "name": "Gloves",
+      "category": 2
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 14,
+    "fields": {
+      "name": "Shoes",
+      "category": 2
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 15,
+    "fields": {
+      "name": "Socks",
+      "category": 2
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 16,
+    "fields": {
+      "name": "Backpacks",
+      "category": 3
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 17,
+    "fields": {
+      "name": "Purses/Handbags",
+      "category": 3
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 18,
+    "fields": {
+      "name": "Laptop Bags",
+      "category": 3
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 19,
+    "fields": {
+      "name": "Wallets",
+      "category": 3
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 20,
+    "fields": {
+      "name": "Belts",
+      "category": 3
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 21,
+    "fields": {
+      "name": "Sunglasses",
+      "category": 3
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 22,
+    "fields": {
+      "name": "Prescription Glasses",
+      "category": 3
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 23,
+    "fields": {
+      "name": "Textbooks",
+      "category": 4
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 24,
+    "fields": {
+      "name": "Notebooks",
+      "category": 4
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 25,
+    "fields": {
+      "name": "Folders/Binders",
+      "category": 4
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 26,
+    "fields": {
+      "name": "Pens/Pencils",
+      "category": 4
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 27,
+    "fields": {
+      "name": "Highlighters",
+      "category": 4
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 28,
+    "fields": {
+      "name": "Erasers",
+      "category": 4
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 29,
+    "fields": {
+      "name": "Rulers",
+      "category": 4
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 30,
+    "fields": {
+      "name": "Keys",
+      "category": 5
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 31,
+    "fields": {
+      "name": "Keychains",
+      "category": 5
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 32,
+    "fields": {
+      "name": "Cosmetics",
+      "category": 5
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 33,
+    "fields": {
+      "name": "Medications",
+      "category": 5
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 34,
+    "fields": {
+      "name": "Contact Lenses",
+      "category": 5
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 35,
+    "fields": {
+      "name": "Hair Accessories",
+      "category": 5
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 36,
+    "fields": {
+      "name": "Basketballs",
+      "category": 6
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 37,
+    "fields": {
+      "name": "Soccer Balls",
+      "category": 6
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 38,
+    "fields": {
+      "name": "Tennis Rackets",
+      "category": 6
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 39,
+    "fields": {
+      "name": "Gym Clothes",
+      "category": 6
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 40,
+    "fields": {
+      "name": "Water Bottles",
+      "category": 6
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 41,
+    "fields": {
+      "name": "Towels",
+      "category": 6
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 42,
+    "fields": {
+      "name": "Yoga Mats",
+      "category": 6
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 43,
+    "fields": {
+      "name": "Drink Containers",
+      "category": 7
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 44,
+    "fields": {
+      "name": "Coffee Cups",
+      "category": 7
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 45,
+    "fields": {
+      "name": "Travel Mugs",
+      "category": 7
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 46,
+    "fields": {
+      "name": "Lunch Boxes",
+      "category": 7
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 47,
+    "fields": {
+      "name": "Thermoses",
+      "category": 7
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 48,
+    "fields": {
+      "name": "Bicycles",
+      "category": 8
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 49,
+    "fields": {
+      "name": "Scooters",
+      "category": 8
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 50,
+    "fields": {
+      "name": "Skateboards",
+      "category": 8
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 51,
+    "fields": {
+      "name": "Helmets",
+      "category": 8
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 52,
+    "fields": {
+      "name": "Bike Locks",
+      "category": 8
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 53,
+    "fields": {
+      "name": "Student ID Cards",
+      "category": 9
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 54,
+    "fields": {
+      "name": "Driver's License",
+      "category": 9
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 55,
+    "fields": {
+      "name": "Credit Cards",
+      "category": 9
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 56,
+    "fields": {
+      "name": "Library Cards",
+      "category": 9
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 57,
+    "fields": {
+      "name": "Passports",
+      "category": 9
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 58,
+    "fields": {
+      "name": "Insurance Cards",
+      "category": 9
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 59,
+    "fields": {
+      "name": "Transcripts",
+      "category": 9
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 60,
+    "fields": {
+      "name": "Rings",
+      "category": 10
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 61,
+    "fields": {
+      "name": "Necklaces",
+      "category": 10
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 62,
+    "fields": {
+      "name": "Bracelets",
+      "category": 10
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 63,
+    "fields": {
+      "name": "Earrings",
+      "category": 10
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 64,
+    "fields": {
+      "name": "Watches",
+      "category": 10
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 65,
+    "fields": {
+      "name": "Umbrellas",
+      "category": 11
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 66,
+    "fields": {
+      "name": "Blankets",
+      "category": 11
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 67,
+    "fields": {
+      "name": "Pillows",
+      "category": 11
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 68,
+    "fields": {
+      "name": "Toys",
+      "category": 11
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 69,
+    "fields": {
+      "name": "Musical Instruments",
+      "category": 11
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 70,
+    "fields": {
+      "name": "Tools",
+      "category": 11
+    }
+  },
+  {
+    "model": "inventory.subcategory",
+    "pk": 71,
+    "fields": {
+      "name": "Art Supplies",
+      "category": 11
+    }
+  }
+]

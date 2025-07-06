@@ -36,9 +36,9 @@ export const Dashboard = () => {
       case "finder":
         return [
           { title: "Found Items Reported", value: "5", icon: Package, color: "text-blue-600" },
-          { title: "Items Matched", value: "3", icon: CheckCircle, color: "text-green-600" },
-          { title: "Pending Claims", value: "2", icon: Clock, color: "text-yellow-600" },
-          { title: "Items Handed Over", value: "3", icon: TrendingUp, color: "text-purple-600" },
+          // { title: "Items Matched", value: "3", icon: CheckCircle, color: "text-green-600" },
+          // { title: "Pending Claims", value: "2", icon: Clock, color: "text-yellow-600" },
+          // { title: "Items Handed Over", value: "3", icon: TrendingUp, color: "text-purple-600" },
         ];
       case "manager":
         return [

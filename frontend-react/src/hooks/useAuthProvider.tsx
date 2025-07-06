@@ -78,10 +78,10 @@ export default function AuthProvider ({ children }: AuthProviderProps ) {
             try{
                 // await getUser()
                 setCurrentUser({
-                    first_name : "Daniel",
-                    last_name : "Kasereka",
-                    email : "email",
-                    user_role : "manager",
+                    last_name: 'daniel',
+                    first_name: 'daniel',
+                    user_role: 'admin',
+                    email:'my email'
                 })
             }catch{
                 setCurrentUser(null)

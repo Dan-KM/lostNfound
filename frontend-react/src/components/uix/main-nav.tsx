@@ -27,8 +27,8 @@ import { useAuth } from "@/hooks/useAuthProvider"
 const data = {
   navMain: [
     {
-      id: "dashboard",
-      title: "Dashboard",
+      id: "home",
+      title: "Home",
       icon: HomeIcon,
       allowedRoles: ["__all__"],
     },
