@@ -76,13 +76,13 @@ export default function AuthProvider ({ children }: AuthProviderProps ) {
     useEffect(()=>{
         async function fetchUser (){
             try{
-                // await getUser()
-                setCurrentUser({
-                    last_name: 'daniel',
-                    first_name: 'daniel',
-                    user_role: 'admin',
-                    email:'my email'
-                })
+                await getUser()
+                // setCurrentUser({
+                //     last_name: 'daniel',
+                //     first_name: 'daniel',
+                //     user_role: 'admin',
+                //     email:'my email'
+                // })
             }catch{
                 setCurrentUser(null)
             }

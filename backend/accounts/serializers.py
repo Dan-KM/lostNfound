@@ -6,5 +6,5 @@ class CustomUserSerializer(serializers.ModelSerializer):
     user_role = serializers.CharField(read_only= True)
     class Meta:
         model = CustomUser
-        fields  = ['first_name','last_name','email', 'user_role','phone_number','user_image', 'password']
+        fields  = ['id','first_name','last_name','email', 'user_role','phone_number','user_image', 'password']
         # fields  = "__all__"

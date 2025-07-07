@@ -24,8 +24,15 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Item
         fields ='__all__'
 
+class ItemSerializerWithCategory(serializers.ModelSerializer):
+    category = CategorySerializer()
+    subcategory = SubCategorySerializer()
+    class Meta:
+        model = Item
+        fields = ['id', 'name', 'description', 'category', 'subcategory', 'location']
+
 class UserItemSerializer(serializers.ModelSerializer):
-    item = ItemSerializer()
+    item = ItemSerializerWithCategory()
     class Meta:
         model = UserItem
         fields = ['user', 'serial_id','status', 'reported_date', 'item', 'updated_at']

@@ -30,7 +30,7 @@ class VectorDB:
             metadatas=[{"location": item.item.location, 
                         "category": item.item.category.name,
                         "subcategory": item.item.subcategory.name, 
-                        "type": item.item.type, 
+                        "type": item.item.item_type, 
                         "item_id": item.item.id,
                         "reported_date": item.reported_date.isoformat()  # ✅ fixed
                         }],
@@ -45,7 +45,7 @@ class VectorDB:
             metadatas=[{"location": item.item.location, 
                         "category": item.item.category.name,
                         "subcategory": item.item.subcategory.name, 
-                        "type": item.item.type, 
+                        "type": item.item.item_type, 
                         "item_id": item.item.id,
                         "reported_date": item.reported_date.isoformat()  # ✅ fixed
                         }],
@@ -67,10 +67,10 @@ class VectorDB:
         Returns:
             List of matching items with similarity scores
         """
-        is_lost = query_item_id.startswith("FND")
+        is_lost = query_item_id.startswith("LST")
         
-        source_collection = self.found_items_collection if is_lost else self.lost_items_collection
-        target_collection= self.lost_items_collection if is_lost else self.found_items_collection
+        target_collection= self.found_items_collection if is_lost else self.lost_items_collection
+        source_collection= self.lost_items_collection if is_lost else self.found_items_collection
         
         
         # Get the query item's embedding

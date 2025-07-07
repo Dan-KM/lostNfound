@@ -1,0 +1,728 @@
+[
+  {
+    "model": "inventory.item",
+    "pk": 1,
+    "fields": {
+      "name": "iPhone 14 Pro",
+      "description": "Space Black, cracked screen protector",
+      "item_image": null,
+      "location": "Student Center food court",
+      "category": 1,
+      "subcategory": 1,
+      "item_type": "found",
+      "other_details": {
+        "color": "space black",
+        "storage": "128GB",
+        "condition": "good"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 2,
+    "fields": {
+      "name": "MacBook Pro 16-inch",
+      "description": "Silver laptop with university stickers",
+      "item_image": null,
+      "location": "Engineering building room 205",
+      "category": 1,
+      "subcategory": 2,
+      "item_type": "lost",
+      "other_details": {
+        "color": "silver",
+        "year": "2023",
+        "brand": "Apple"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 3,
+    "fields": {
+      "name": "Black North Face Jacket",
+      "description": "Men's size M, fleece lined",
+      "item_image": null,
+      "location": "Gymnasium locker room",
+      "category": 2,
+      "subcategory": 9,
+      "item_type": "found",
+      "other_details": {
+        "color": "black",
+        "size": "M",
+        "brand": "North Face"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 4,
+    "fields": {
+      "name": "JanSport Backpack",
+      "description": "Navy blue with pink accents",
+      "item_image": null,
+      "location": "Library 3rd floor",
+      "category": 3,
+      "subcategory": 16,
+      "item_type": "found",
+      "other_details": {
+        "color": "navy blue",
+        "brand": "JanSport",
+        "pattern": "solid with pink zipper"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 5,
+    "fields": {
+      "name": "Calculus Textbook",
+      "description": "Stewart's Calculus 8th edition",
+      "item_image": null,
+      "location": "Mathematics building classroom 101",
+      "category": 4,
+      "subcategory": 23,
+      "item_type": "lost",
+      "other_details": {
+        "author": "Stewart",
+        "edition": "8th",
+        "subject": "Calculus"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 6,
+    "fields": {
+      "name": "House Keys",
+      "description": "Keychain with 4 keys and Toyota fob",
+      "item_image": null,
+      "location": "Campus parking lot B",
+      "category": 5,
+      "subcategory": 30,
+      "item_type": "found",
+      "other_details": {
+        "key_count": "4",
+        "car_brand": "Toyota",
+        "keychain": "leather"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 7,
+    "fields": {
+      "name": "Samsung Galaxy S22",
+      "description": "Phantom Black, no visible damage",
+      "item_image": null,
+      "location": "Library study carrel 12B",
+      "category": 1,
+      "subcategory": 1,
+      "item_type": "found",
+      "other_details": {
+        "color": "black",
+        "storage": "256GB"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 8,
+    "fields": {
+      "name": "AirPods Pro",
+      "description": "White charging case, left earbud missing",
+      "item_image": null,
+      "location": "Student Union building",
+      "category": 1,
+      "subcategory": 4,
+      "item_type": "lost",
+      "other_details": {
+        "color": "white",
+        "generation": "2nd",
+        "missing_parts": "left earbud"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 9,
+    "fields": {
+      "name": "Red Baseball Cap",
+      "description": "University logo, adjustable strap",
+      "item_image": null,
+      "location": "Campus quad near fountain",
+      "category": 2,
+      "subcategory": 11,
+      "item_type": "found",
+      "other_details": {
+        "color": "red",
+        "logo": "university",
+        "item_type": "adjustable"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 10,
+    "fields": {
+      "name": "Leather Wallet",
+      "description": "Brown leather, contains student ID",
+      "item_image": null,
+      "location": "Cafeteria table 15",
+      "category": 3,
+      "subcategory": 19,
+      "item_type": "found",
+      "other_details": {
+        "color": "brown",
+        "material": "leather",
+        "contents": "student ID, cash"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 11,
+    "fields": {
+      "name": "Spiral Notebook",
+      "description": "Blue cover, chemistry notes inside",
+      "item_image": null,
+      "location": "Chemistry lab room 302",
+      "category": 4,
+      "subcategory": 24,
+      "item_type": "lost",
+      "other_details": {
+        "color": "blue",
+        "subject": "chemistry",
+        "pages": "approximately 50"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 12,
+    "fields": {
+      "name": "Basketball",
+      "description": "Spalding official size, slightly worn",
+      "item_image": null,
+      "location": "Outdoor basketball court",
+      "category": 6,
+      "subcategory": 36,
+      "item_type": "found",
+      "other_details": {
+        "brand": "Spalding",
+        "size": "official",
+        "condition": "worn"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 13,
+    "fields": {
+      "name": "Stainless Steel Water Bottle",
+      "description": "32oz Hydro Flask, dented on bottom",
+      "item_image": null,
+      "location": "Recreation center locker 45",
+      "category": 6,
+      "subcategory": 40,
+      "item_type": "found",
+      "other_details": {
+        "brand": "Hydro Flask",
+        "size": "32oz",
+        "condition": "dented"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 14,
+    "fields": {
+      "name": "Student ID Card",
+      "description": "ID #12345678, expires 2026",
+      "item_image": null,
+      "location": "Library entrance",
+      "category": 9,
+      "subcategory": 53,
+      "item_type": "found",
+      "other_details": {
+        "id_number": "12345678",
+        "expiry": "2026",
+        "department": "Computer Science"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 15,
+    "fields": {
+      "name": "Silver Watch",
+      "description": "Casio digital watch, scratched face",
+      "item_image": null,
+      "location": "Physics lab bench 7",
+      "category": 10,
+      "subcategory": 64,
+      "item_type": "lost",
+      "other_details": {
+        "brand": "Casio",
+        "item_type": "digital",
+        "condition": "scratched"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 16,
+    "fields": {
+      "name": "Black Umbrella",
+      "description": "Compact folding umbrella, handle missing",
+      "item_image": null,
+      "location": "Main entrance lobby",
+      "category": 11,
+      "subcategory": 65,
+      "item_type": "found",
+      "other_details": {
+        "color": "black",
+        "item_type": "folding",
+        "condition": "handle missing"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 17,
+    "fields": {
+      "name": "Prescription Glasses",
+      "description": "Black frames, progressive lenses",
+      "item_image": null,
+      "location": "Lecture hall C",
+      "category": 3,
+      "subcategory": 22,
+      "item_type": "found",
+      "other_details": {
+        "frame_color": "black",
+        "lens_item_type": "progressive",
+        "brand": "unknown"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 18,
+    "fields": {
+      "name": "USB Flash Drive",
+      "description": "32GB SanDisk, blue casing",
+      "item_image": null,
+      "location": "Computer lab station 23",
+      "category": 1,
+      "subcategory": 8,
+      "item_type": "lost",
+      "other_details": {
+        "brand": "SanDisk",
+        "capacity": "32GB",
+        "color": "blue"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 19,
+    "fields": {
+      "name": "Gray Hoodie",
+      "description": "Size L, university logo on front",
+      "item_image": null,
+      "location": "Student lounge",
+      "category": 2,
+      "subcategory": 10,
+      "item_type": "found",
+      "other_details": {
+        "color": "gray",
+        "size": "L",
+        "logo": "university"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 20,
+    "fields": {
+      "name": "Bike Lock",
+      "description": "Combination lock, 4 digits",
+      "item_image": null,
+      "location": "Bike rack near dormitory",
+      "category": 8,
+      "subcategory": 52,
+      "item_type": "found",
+      "other_details": {
+        "item_type": "combination",
+        "digits": "4",
+        "brand": "Master Lock"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 21,
+    "fields": {
+      "name": "iPad Air",
+      "description": "64GB Wi-Fi model, rose gold",
+      "item_image": null,
+      "location": "Art studio room 105",
+      "category": 1,
+      "subcategory": 3,
+      "item_type": "lost",
+      "other_details": {
+        "color": "rose gold",
+        "storage": "64GB",
+        "model": "iPad Air"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 22,
+    "fields": {
+      "name": "iPhone Charger",
+      "description": "Lightning cable, 6ft white",
+      "item_image": null,
+      "location": "Dormitory common room",
+      "category": 1,
+      "subcategory": 5,
+      "item_type": "found",
+      "other_details": {
+        "color": "white",
+        "length": "6ft",
+        "item_type": "lightning"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 23,
+    "fields": {
+      "name": "Scientific Calculator",
+      "description": "TI-84 Plus, graphing calculator",
+      "item_image": null,
+      "location": "Mathematics building room 203",
+      "category": 1,
+      "subcategory": 6,
+      "item_type": "found",
+      "other_details": {
+        "brand": "Texas Instruments",
+        "model": "TI-84 Plus",
+        "item_type": "graphing"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 24,
+    "fields": {
+      "name": "Apple Watch",
+      "description": "Series 8, 45mm, black sport band",
+      "item_image": null,
+      "location": "Fitness center treadmill area",
+      "category": 1,
+      "subcategory": 7,
+      "item_type": "lost",
+      "other_details": {
+        "brand": "Apple",
+        "series": "8",
+        "size": "45mm",
+        "band_color": "black"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 25,
+    "fields": {
+      "name": "Winter Scarf",
+      "description": "Red and white striped, wool blend",
+      "item_image": null,
+      "location": "Campus bookstore",
+      "category": 2,
+      "subcategory": 12,
+      "item_type": "found",
+      "other_details": {
+        "color": "red and white",
+        "material": "wool blend",
+        "pattern": "striped"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 26,
+    "fields": {
+      "name": "Leather Gloves",
+      "description": "Brown leather, size M, lined",
+      "item_image": null,
+      "location": "Administration building lobby",
+      "category": 2,
+      "subcategory": 13,
+      "item_type": "found",
+      "other_details": {
+        "color": "brown",
+        "material": "leather",
+        "size": "M",
+        "lining": "yes"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 27,
+    "fields": {
+      "name": "Nike Running Shoes",
+      "description": "White and blue, size 10, worn",
+      "item_image": null,
+      "location": "Track and field locker room",
+      "category": 2,
+      "subcategory": 14,
+      "item_type": "lost",
+      "other_details": {
+        "brand": "Nike",
+        "color": "white and blue",
+        "size": "10",
+        "condition": "worn"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 28,
+    "fields": {
+      "name": "Wool Socks",
+      "description": "Pair of gray hiking socks",
+      "item_image": null,
+      "location": "Laundry room basement",
+      "category": 2,
+      "subcategory": 15,
+      "item_type": "found",
+      "other_details": {
+        "color": "gray",
+        "material": "wool",
+        "item_type": "hiking"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 29,
+    "fields": {
+      "name": "Coach Purse",
+      "description": "Black leather handbag, silver hardware",
+      "item_image": null,
+      "location": "Women's restroom 2nd floor",
+      "category": 3,
+      "subcategory": 17,
+      "item_type": "found",
+      "other_details": {
+        "brand": "Coach",
+        "color": "black",
+        "material": "leather",
+        "hardware": "silver"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 30,
+    "fields": {
+      "name": "Laptop Bag",
+      "description": "Targus 15-inch laptop case, black",
+      "item_image": null,
+      "location": "Computer science building room 301",
+      "category": 3,
+      "subcategory": 18,
+      "item_type": "lost",
+      "other_details": {
+        "brand": "Targus",
+        "size": "15-inch",
+        "color": "black",
+        "item_type": "laptop case"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 31,
+    "fields": {
+      "name": "Leather Belt",
+      "description": "Brown leather, size 34, silver buckle",
+      "item_image": null,
+      "location": "Gym changing room",
+      "category": 3,
+      "subcategory": 20,
+      "item_type": "found",
+      "other_details": {
+        "color": "brown",
+        "material": "leather",
+        "size": "34",
+        "buckle": "silver"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 32,
+    "fields": {
+      "name": "Ray-Ban Sunglasses",
+      "description": "Aviator style, gold frames",
+      "item_image": null,
+      "location": "Outdoor seating area",
+      "category": 3,
+      "subcategory": 21,
+      "item_type": "found",
+      "other_details": {
+        "brand": "Ray-Ban",
+        "style": "aviator",
+        "frame_color": "gold"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 33,
+    "fields": {
+      "name": "Biology Textbook",
+      "description": "Campbell Biology 12th edition",
+      "item_image": null,
+      "location": "Biology lab room 150",
+      "category": 4,
+      "subcategory": 23,
+      "item_type": "found",
+      "other_details": {
+        "title": "Campbell Biology",
+        "edition": "12th",
+        "subject": "Biology"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 34,
+    "fields": {
+      "name": "Three-Ring Binder",
+      "description": "Blue 2-inch binder, history notes",
+      "item_image": null,
+      "location": "History building room 220",
+      "category": 4,
+      "subcategory": 25,
+      "item_type": "lost",
+      "other_details": {
+        "color": "blue",
+        "size": "2-inch",
+        "subject": "history"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 35,
+    "fields": {
+      "name": "Mechanical Pencil Set",
+      "description": "Uni-ball Kuru Toga, 0.5mm, pack of 3",
+      "item_image": null,
+      "location": "Engineering lab bench 12",
+      "category": 4,
+      "subcategory": 26,
+      "item_type": "found",
+      "other_details": {
+        "brand": "Uni-ball",
+        "model": "Kuru Toga",
+        "size": "0.5mm",
+        "quantity": "3"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 36,
+    "fields": {
+      "name": "Yellow Highlighters",
+      "description": "Sharpie highlighters, pack of 4",
+      "item_image": null,
+      "location": "Library study room 4",
+      "category": 4,
+      "subcategory": 27,
+      "item_type": "found",
+      "other_details": {
+        "brand": "Sharpie",
+        "color": "yellow",
+        "quantity": "4"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 37,
+    "fields": {
+      "name": "Dorm Room Key",
+      "description": "Single key with room number 312B tag",
+      "item_image": null,
+      "location": "Dining hall table 8",
+      "category": 5,
+      "subcategory": 30,
+      "item_type": "found",
+      "other_details": {
+        "room_number": "312B",
+        "building": "dormitory",
+        "key_item_type": "single"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 38,
+    "fields": {
+      "name": "Panda Keychain",
+      "description": "Small stuffed panda with keys attached",
+      "item_image": null,
+      "location": "Psychology building stairs",
+      "category": 5,
+      "subcategory": 31,
+      "item_type": "found",
+      "other_details": {
+        "animal": "panda",
+        "material": "stuffed",
+        "color": "black and white"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 39,
+    "fields": {
+      "name": "Makeup Bag",
+      "description": "Pink cosmetic pouch with various items",
+      "item_image": null,
+      "location": "Student center restroom",
+      "category": 5,
+      "subcategory": 32,
+      "item_type": "lost",
+      "other_details": {
+        "color": "pink",
+        "item_type": "cosmetic pouch",
+        "contents": "various makeup items"
+      }
+    }
+  },
+  {
+    "model": "inventory.item",
+    "pk": 40,
+    "fields": {
+      "name": "Tennis Racket",
+      "description": "Wilson Pro Staff, slightly used",
+      "item_image": null,
+      "location": "Tennis courts bench",
+      "category": 6,
+      "subcategory": 38,
+      "item_type": "found",
+      "other_details": {
+        "brand": "Wilson",
+        "model": "Pro Staff",
+        "condition": "slightly used"
+      }
+    }
+  }
+]

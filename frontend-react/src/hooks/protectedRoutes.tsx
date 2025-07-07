@@ -9,12 +9,12 @@ type ProtectedRoutesProps = PropsWithChildren & {
 export default function ProtectedRoutes ({children, allowedRoles} : ProtectedRoutesProps ){
     const { currentUser, getUser } = useAuth()
 
-    // useEffect(()=>{
-    //     async function s(){
-    //         await getUser()
-    //     }
-    //     s()
-    // },[])
+    useEffect(()=>{
+        async function s(){
+            await getUser()
+        }
+        s()
+    },[])
 
     if (!allowedRoles?.includes("__all__")) {
         if(currentUser === undefined){

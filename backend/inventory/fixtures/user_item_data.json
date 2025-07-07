@@ -1,0 +1,442 @@
+[
+  {
+    "model": "inventory.useritem",
+    "pk": 1,
+    "fields": {
+      "item": 1,
+      "user": 11,
+      "reported_date": "2025-07-05T09:30:00Z",
+      "updated_at": "2025-07-05T09:30:00Z",
+      "serial_id": "FND-00001"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 2,
+    "fields": {
+      "item": 2,
+      "user": 4,
+      "reported_date": "2025-07-04T14:20:00Z",
+      "updated_at": "2025-07-04T14:20:00Z",
+      "serial_id": "LST-00001"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 3,
+    "fields": {
+      "item": 3,
+      "user": 16,
+      "reported_date": "2025-07-03T16:45:00Z",
+      "updated_at": "2025-07-03T16:45:00Z",
+      "serial_id": "FND-00002"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 4,
+    "fields": {
+      "item": 4,
+      "user": 20,
+      "reported_date": "2025-07-02T11:15:00Z",
+      "updated_at": "2025-07-02T11:15:00Z",
+      "serial_id": "FND-00003"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 5,
+    "fields": {
+      "item": 5,
+      "user": 5,
+      "reported_date": "2025-07-01T10:00:00Z",
+      "updated_at": "2025-07-01T10:00:00Z",
+      "serial_id": "LST-00002"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 6,
+    "fields": {
+      "item": 6,
+      "user": 11,
+      "reported_date": "2025-06-30T18:30:00Z",
+      "updated_at": "2025-06-30T18:30:00Z",
+      "serial_id": "FND-00004"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 7,
+    "fields": {
+      "item": 7,
+      "user": 16,
+      "reported_date": "2023-10-21T13:45:00Z",
+      "updated_at": "2023-10-21T13:45:00Z",
+      "serial_id": "FND-00005"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 8,
+    "fields": {
+      "item": 8,
+      "user": 6,
+      "reported_date": "2025-07-06T13:20:00Z",
+      "updated_at": "2025-07-06T13:20:00Z",
+      "serial_id": "LST-00003"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 9,
+    "fields": {
+      "item": 9,
+      "user": 20,
+      "reported_date": "2025-07-05T12:00:00Z",
+      "updated_at": "2025-07-05T12:00:00Z",
+      "serial_id": "FND-00006"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 10,
+    "fields": {
+      "item": 10,
+      "user": 11,
+      "reported_date": "2025-07-04T19:45:00Z",
+      "updated_at": "2025-07-04T19:45:00Z",
+      "serial_id": "FND-00007"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 11,
+    "fields": {
+      "item": 11,
+      "user": 7,
+      "reported_date": "2025-07-03T14:30:00Z",
+      "updated_at": "2025-07-03T14:30:00Z",
+      "serial_id": "LST-00004"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 12,
+    "fields": {
+      "item": 12,
+      "user": 16,
+      "reported_date": "2025-07-02T17:00:00Z",
+      "updated_at": "2025-07-02T17:00:00Z",
+      "serial_id": "FND-00008"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 13,
+    "fields": {
+      "item": 13,
+      "user": 20,
+      "reported_date": "2025-07-01T15:15:00Z",
+      "updated_at": "2025-07-01T15:15:00Z",
+      "serial_id": "FND-00009"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 14,
+    "fields": {
+      "item": 14,
+      "user": 11,
+      "reported_date": "2025-06-29T08:45:00Z",
+      "updated_at": "2025-06-29T08:45:00Z",
+      "serial_id": "FND-00010"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 15,
+    "fields": {
+      "item": 15,
+      "user": 8,
+      "reported_date": "2025-06-28T11:30:00Z",
+      "updated_at": "2025-06-28T11:30:00Z",
+      "serial_id": "LST-00005"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 16,
+    "fields": {
+      "item": 16,
+      "user": 16,
+      "reported_date": "2025-06-27T07:20:00Z",
+      "updated_at": "2025-06-27T07:20:00Z",
+      "serial_id": "FND-00011"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 17,
+    "fields": {
+      "item": 17,
+      "user": 20,
+      "reported_date": "2025-06-26T16:10:00Z",
+      "updated_at": "2025-06-26T16:10:00Z",
+      "serial_id": "FND-00012"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 18,
+    "fields": {
+      "item": 18,
+      "user": 12,
+      "reported_date": "2025-06-25T13:55:00Z",
+      "updated_at": "2025-06-25T13:55:00Z",
+      "serial_id": "LST-00006"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 19,
+    "fields": {
+      "item": 19,
+      "user": 11,
+      "reported_date": "2025-06-24T20:30:00Z",
+      "updated_at": "2025-06-24T20:30:00Z",
+      "serial_id": "FND-00013"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 20,
+    "fields": {
+      "item": 20,
+      "user": 16,
+      "reported_date": "2025-06-23T12:40:00Z",
+      "updated_at": "2025-06-23T12:40:00Z",
+      "serial_id": "FND-00014"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 21,
+    "fields": {
+      "item": 21,
+      "user": 13,
+      "reported_date": "2025-07-06T10:15:00Z",
+      "updated_at": "2025-07-06T10:15:00Z",
+      "serial_id": "LST-00007"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 22,
+    "fields": {
+      "item": 22,
+      "user": 20,
+      "reported_date": "2025-07-05T22:00:00Z",
+      "updated_at": "2025-07-05T22:00:00Z",
+      "serial_id": "FND-00015"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 23,
+    "fields": {
+      "item": 23,
+      "user": 11,
+      "reported_date": "2025-07-04T14:45:00Z",
+      "updated_at": "2025-07-04T14:45:00Z",
+      "serial_id": "FND-00016"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 24,
+    "fields": {
+      "item": 24,
+      "user": 17,
+      "reported_date": "2025-07-03T17:30:00Z",
+      "updated_at": "2025-07-03T17:30:00Z",
+      "serial_id": "LST-00008"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 25,
+    "fields": {
+      "item": 25,
+      "user": 16,
+      "reported_date": "2025-07-02T11:20:00Z",
+      "updated_at": "2025-07-02T11:20:00Z",
+      "serial_id": "FND-00017"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 26,
+    "fields": {
+      "item": 26,
+      "user": 20,
+      "reported_date": "2025-07-01T09:45:00Z",
+      "updated_at": "2025-07-01T09:45:00Z",
+      "serial_id": "FND-00018"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 27,
+    "fields": {
+      "item": 27,
+      "user": 18,
+      "reported_date": "2025-06-30T18:15:00Z",
+      "updated_at": "2025-06-30T18:15:00Z",
+      "serial_id": "LST-00009"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 28,
+    "fields": {
+      "item": 28,
+      "user": 11,
+      "reported_date": "2025-06-29T20:30:00Z",
+      "updated_at": "2025-06-29T20:30:00Z",
+      "serial_id": "FND-00019"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 29,
+    "fields": {
+      "item": 29,
+      "user": 16,
+      "reported_date": "2025-06-28T15:50:00Z",
+      "updated_at": "2025-06-28T15:50:00Z",
+      "serial_id": "FND-00020"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 30,
+    "fields": {
+      "item": 30,
+      "user": 4,
+      "reported_date": "2025-06-27T13:25:00Z",
+      "updated_at": "2025-06-27T13:25:00Z",
+      "serial_id": "LST-00010"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 31,
+    "fields": {
+      "item": 31,
+      "user": 20,
+      "reported_date": "2025-06-26T16:40:00Z",
+      "updated_at": "2025-06-26T16:40:00Z",
+      "serial_id": "FND-00021"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 32,
+    "fields": {
+      "item": 32,
+      "user": 11,
+      "reported_date": "2025-06-25T12:10:00Z",
+      "updated_at": "2025-06-25T12:10:00Z",
+      "serial_id": "FND-00022"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 33,
+    "fields": {
+      "item": 33,
+      "user": 16,
+      "reported_date": "2025-06-24T14:35:00Z",
+      "updated_at": "2025-06-24T14:35:00Z",
+      "serial_id": "FND-00023"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 34,
+    "fields": {
+      "item": 34,
+      "user": 5,
+      "reported_date": "2025-06-23T10:50:00Z",
+      "updated_at": "2025-06-23T10:50:00Z",
+      "serial_id": "LST-00011"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 35,
+    "fields": {
+      "item": 35,
+      "user": 20,
+      "reported_date": "2025-06-22T16:20:00Z",
+      "updated_at": "2025-06-22T16:20:00Z",
+      "serial_id": "FND-00024"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 36,
+    "fields": {
+      "item": 36,
+      "user": 11,
+      "reported_date": "2025-06-21T11:15:00Z",
+      "updated_at": "2025-06-21T11:15:00Z",
+      "serial_id": "FND-00025"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 37,
+    "fields": {
+      "item": 37,
+      "user": 16,
+      "reported_date": "2025-06-20T19:25:00Z",
+      "updated_at": "2025-06-20T19:25:00Z",
+      "serial_id": "FND-00026"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 38,
+    "fields": {
+      "item": 38,
+      "user": 20,
+      "reported_date": "2025-06-19T13:40:00Z",
+      "updated_at": "2025-06-19T13:40:00Z",
+      "serial_id": "FND-00027"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 39,
+    "fields": {
+      "item": 39,
+      "user": 6,
+      "reported_date": "2025-06-18T08:55:00Z",
+      "updated_at": "2025-06-18T08:55:00Z",
+      "serial_id": "LST-00012"
+    }
+  },
+  {
+    "model": "inventory.useritem",
+    "pk": 40,
+    "fields": {
+      "item": 40,
+      "user": 11,
+      "reported_date": "2025-06-17T15:30:00Z",
+      "updated_at": "2025-06-17T15:30:00Z",
+      "serial_id": "FND-00028"
+    }
+  }
+]
