@@ -42,7 +42,8 @@ export default function AuthProvider ({ children }: AuthProviderProps ) {
             setRefreshToken(refresh)
             localStorage.setItem('access_token', token)
             localStorage.setItem('refresh_token', refresh)
-        
+
+            await getUser()
         }catch(error){
             setAuthToken(null)
             setRefreshToken(null)

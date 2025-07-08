@@ -35,4 +35,4 @@ class UserItemSerializer(serializers.ModelSerializer):
     item = ItemSerializerWithCategory()
     class Meta:
         model = UserItem
-        fields = ['user', 'serial_id','status', 'reported_date', 'item', 'updated_at']
+        fields = ['id', 'user', 'serial_id','status', 'reported_date', 'item', 'updated_at']

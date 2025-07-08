@@ -46,6 +46,7 @@ def embed_user_item(userItem: UserItem):
         # If it doesn't start with "FND", assume it's a lost item
         ItemMatcher.add_lost_item(item=userItem)
 
+    save_matches(userItem= userItem)
 
 
 # def initialize_database(is_lost: bool = True, threshold: float = 0.5):
