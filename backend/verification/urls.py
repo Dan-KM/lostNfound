@@ -4,9 +4,10 @@ from . import views
 
 router = DefaultRouter()
 router.register('question', views.VerificationQuestionView)
-router.register('answer', views.VerificationAnswerView)
-router.register('questionnaire', views.FoundItemQuestionnaireViewSet)
+router.register('answer', views.VerificationAnswersView)
+router.register('questionnaire', views.VerificationQuestionnaireView)
 
 urlpatterns = [
     path('', include(router.urls)),
+    # path('for/<str:serial_id>/', views.LostItemQnAView.as_view())
 ]

@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'django_filters',
+
 
     'api',
     'accounts',
@@ -145,7 +147,11 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',  # Enable filtering
+    ],
 }
 
 MEDIA_URL = '/media/'
