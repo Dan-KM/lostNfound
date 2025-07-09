@@ -9,6 +9,8 @@ import AuthProvider from './hooks/useAuthProvider.tsx'
 // import ProtectedRoutes from './hooks/protectedRoutes.tsx'
 import Admin from '@/page/DashboardPage'
 import EmailApp from '@/page/dashboard/test'
+import RegisterPage from './page/auth/register.tsx'
+
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: '/auth/login',
     element: <LoginPage/>
+  },
+  {
+    path: '/auth/register',
+    element: <RegisterPage/>
   },
   // {
   //   path: '/dashboard',

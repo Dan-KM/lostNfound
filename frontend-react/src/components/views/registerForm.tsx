@@ -3,12 +3,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import Link from "next/link"
 import { Package } from "lucide-react"
 import { API } from "@/lib/API"
 import { useState } from "react"
-import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom"
 
 export function RegisterForm({
   className,
@@ -31,7 +30,8 @@ export function RegisterForm({
     
     const [error, setError] = useState<String>()
 
-    const router = useRouter();
+    // const router = useRouter();
+    const navigate = useNavigate();
 
     // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     //     e.preventDefault()
@@ -86,7 +86,8 @@ export function RegisterForm({
           const response = await API.post("/auth/register/", formData);
           // const response = await API.post("/auth/register/", JSON.stringify(formData));
           console.log("Response:", response);  // Add this line
-          router.push("/auth/login");
+        //   router.push("/auth/login");
+        navigate('/auth/login', { replace: true });
       } catch (error) {
           console.error("Full error:", error);  // Enhanced error logging
           if (axios.isAxiosError(error)) {
@@ -178,7 +179,7 @@ export function RegisterForm({
               </Button>
               <div className="text-center text-sm">
                 Alreagy have an account?{" "}
-                <Link href="/auth/login" className="underline underline-offset-4 text-blue-600">
+                <Link to="/auth/login" className="underline underline-offset-4 text-blue-600">
                   Login
                 </Link>
               </div>

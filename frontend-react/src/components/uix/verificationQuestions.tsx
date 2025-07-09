@@ -4,17 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { HelpCircle, Plus, Trash2 } from "lucide-react";
 import { API } from "@/lib/API";
-import { type Questionnaire } from "@/lib/ADT";
 
 type VerificationQuestion = {
     id: number;
     question: string;
 };
 
-type verificationQuestionType = {
-    found_item_serial_id: string;
-    questions: string[];
-};
 
 type QuestionnaireResponse = {
     id: number;
@@ -84,9 +79,27 @@ const VerificationQuestions = ({
         }
     }
 
-    function handleDeleteQuestion(id: number) {
+    // function handleDeleteQuestion(id: number) {
+    //     setQuestions(prev => prev.filter(q => q.id !== id));
+    // }
+
+    async function handleDeleteQuestion(id: number) {
+    const confirmDelete = window.confirm("Are you sure you want to delete this question?");
+    if (!confirmDelete) return;
+
+    try {
+        setIsLoading(true);
+        await API.delete(`verify/question/${id}/`);
         setQuestions(prev => prev.filter(q => q.id !== id));
+        console.log(`Question ${id} deleted successfully.`);
+    } catch (error) {
+        console.error("Failed to delete question:", error);
+        alert("Failed to delete the question. Please try again.");
+    } finally {
+        setIsLoading(false);
     }
+}
+
 
     function handleKeyPress(e: React.KeyboardEvent) {
         if (e.key === "Enter") {

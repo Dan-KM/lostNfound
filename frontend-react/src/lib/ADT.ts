@@ -103,3 +103,15 @@ export type Questionnaire = {
   questions: QuestionnaireQuestion[];
 };
 
+export type Answer = {
+  id: number;
+  answer_text: string;
+  created_at: string; // ISO timestamp
+  question: {
+    id: number;
+    text: string;
+    is_required: boolean;
+    questionnaire: number;
+  };
+  lost_item: number;
+};

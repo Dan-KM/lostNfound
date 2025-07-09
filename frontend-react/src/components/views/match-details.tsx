@@ -8,6 +8,7 @@ import { Bell, Eye, CheckCircle, Clock, AlertTriangle, Settings, Columns2, List 
 import { API } from "@/lib/API";
 import VerificationQuestions from "../uix/verificationQuestions";
 import type { FoundItemResponse, Questionnaire } from "@/lib/ADT";
+import QuestionAnswerList from "./verificationAnswers";
 
 
 export default function MatchDetails({ matchID }: { matchID: string }) {
@@ -19,6 +20,7 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
   const [questionnaire, setQuestionnaire] = useState<Questionnaire | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [details, showDetails] = useState(false);
 
 
   useEffect(() => {
@@ -124,7 +126,7 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
         ← Back to Matches
       </Button>
 
-      <Card className="bg-white shadow-sm border border-slate-200">
+      {/* <Card className="bg-white shadow-sm border border-slate-200">
         <CardHeader>
           <CardTitle className="text-lg text-slate-800 flex items-center">
             <Settings className="mr-3 h-5 w-5 text-blue-600" />
@@ -152,7 +154,7 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
             />
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
 
       <div className="space-y-6">
         {expandedItems ? (
@@ -257,13 +259,24 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
                                 <p>{lostItem.serial_id}</p>
                               </div>
                             </div>
-
+                            {details && (
+                              <div>
+                                <QuestionAnswerList lost_item_id = {match.lost_item.item.id}/>
+                              </div>
+                            )}
                             <CardDescription className="text-sm">
                               {lostItem.item.description}
                             </CardDescription>
                             
                             <div className="pt-2">
-                              {getActionButton(match.status)}
+                              <Button onClick={()=>{
+                                showDetails(!details)
+                              }}>
+                                {!details? ('View Details'):('hide details')}
+                              </Button>
+                              <Button>
+                                Approve Match
+                              </Button>
                             </div>
                           </CardContent>
                         </Card>
