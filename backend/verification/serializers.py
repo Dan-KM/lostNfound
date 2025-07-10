@@ -4,22 +4,11 @@ from inventory.models import UserItem
 from inventory.serializers import UserItemSerializer
 
 
-
-# class VerificationQuestionsSerializer(serializers.ModelSerializer):
-#     class Meta :
-#         model = VerificationQuestion
-#         fields = '__all__'
-
 class VerificationQuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = VerificationQuestion
         fields = ['id', 'question_text', 'is_required']
 
-# class VerificationQuestionnaireSerializer(serializers.ModelSerializer):
-#     questions = VerificationQuestionsSerializer()
-#     class Meta :
-#         model = VerificationQuestionnaire
-#         fields = ['found_item', 'created_at', 'questions']
 
 class VerificationQuestionnaireSerializer(serializers.ModelSerializer):
     questions = VerificationQuestionsSerializer(many=True, read_only=True)  # Related name
@@ -28,18 +17,13 @@ class VerificationQuestionnaireSerializer(serializers.ModelSerializer):
         model = VerificationQuestionnaire
         fields = ['id', 'found_item', 'created_at', 'questions']
 
-class VerificationAnswersSerializer(serializers.ModelSerializer):
-    class Meta :
-        model = VerificationAnswers
-        fields = '__all__'
 
-
-
-class VerificationAnswerSerializer2(serializers.ModelSerializer):
-    question = VerificationQuestionsSerializer()
+class VerificationAnswerSerializer(serializers.ModelSerializer):
+    # question = VerificationQuestionsSerializer()
+    # lost_item = UserItemSerializer(read_only = True)
     class Meta:
         model = VerificationAnswers
-        fields = ['id', 'answer_text', 'created_at', 'question', 'lost_item']
+        fields = ['id', 'status','answer_text', 'created_at', 'question', 'lost_item']
 
 
 class VerificationAnswerListSerializer(serializers.Serializer):
@@ -56,47 +40,57 @@ class VerificationAnswerListSerializer(serializers.Serializer):
             lost_item=lost_item
         ).select_related('question')
 
-        return VerificationAnswerSerializer2(answers, many=True).data
-
-
-# class VerificationQuestionCreateSerializer(serializers.Serializer):
-#     found_item_serial_id = serializers.CharField()
-#     questions = serializers.ListField(
-#         child=serializers.CharField(), allow_empty=False
-#     )
-
-#     def create(self, validated_data):
-#         serial_id = validated_data['found_item_serial_id']
-#         question_texts = validated_data['questions']
-
-#         try:
-#             found_item = UserItem.objects.get(serial_id=serial_id)
-#         except UserItem.DoesNotExist:
-#             raise serializers.ValidationError("Item with that serial_id does not exist.")
-
-#         # Create the questionnaire
-#         questionnaire = VerificationQuestionnaire.objects.create(found_item=found_item)
-
-#         # Create the questions
-#         VerificationQuestion.objects.bulk_create([
-#             VerificationQuestion(questionnaire=questionnaire, question_text=qt)
-#             for qt in question_texts
-#         ])
-
-#         return questionnaire
-    
-
-
-
-# class VerificationQuestionCreateSerializer(serializers.Serializer):
-#     found_item_serial_id = serializers.CharField()
-#     questions = serializers.ListField(
-#         child=serializers.CharField(), allow_empty=False
-#     )
-
+        return VerificationAnswerSerializer(answers, many=True).data
 
 class VerificationQuestionCreateSerializer(serializers.Serializer):
     found_item_serial_id = serializers.CharField()
     questions = serializers.ListField(
         child=serializers.CharField(), allow_empty=False
     )
+
+
+class VerificationQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VerificationQuestion
+        fields = ['id', 'questionnaire', 'question_text', 'is_required']
+
+    def create(self, validated_data):
+        # DRF will call this if it's a single object
+        return VerificationQuestion.objects.create(**validated_data)
+
+
+# class BulkVerificationQuestionSerializer(serializers.ListSerializer):
+#     def create(self, validated_data):
+#         questions = [VerificationQuestion(**item) for item in validated_data]
+#         return VerificationQuestion.objects.bulk_create(questions)
+
+
+class BulkVerificationQuestionSerializer(serializers.ListSerializer):
+    def update(self, instance, validated_data):
+        # Create a mapping of id -> instance
+        instance_mapping = {item.id: item for item in instance}
+        data_mapping = {item['id']: item for item in validated_data}
+
+        updated_instances = []
+
+        for question_id, data in data_mapping.items():
+            obj = instance_mapping.get(question_id)
+            if obj:
+                for attr, value in data.items():
+                    setattr(obj, attr, value)
+                obj.save()
+                updated_instances.append(obj)
+
+        return updated_instances
+
+    def create(self, validated_data):
+        return VerificationQuestion.objects.bulk_create(
+            [VerificationQuestion(**item) for item in validated_data]
+        )
+
+
+class VerificationQuestionBulkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VerificationQuestion
+        fields = ['id', 'questionnaire', 'question_text', 'is_required']
+        list_serializer_class = BulkVerificationQuestionSerializer

@@ -2,66 +2,86 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
-import { Label } from "@/components/ui/label";
 import { Bell, Eye, CheckCircle, Clock, AlertTriangle, Settings, Columns2, List } from "lucide-react";
 import { API } from "@/lib/API";
 import VerificationQuestions from "../uix/verificationQuestions";
-import type { FoundItemResponse, Questionnaire } from "@/lib/ADT";
-import QuestionAnswerList from "./verificationAnswers";
+import type { FoundItemMatch, Questionnaire } from "@/lib/ADT";
+import { ItemVerification } from "./verificationAnswers";
 
 
 export default function MatchDetails({ matchID }: { matchID: string }) {
   const navigateBackToMenu = () => {
     window.history.back();
   };
-  const [matchThreshold, setMatchThreshold] = useState([70]);
-  const [expandedItems, setExpandedItems] = useState<FoundItemResponse | null>(null);
+  const [expandedItems, setExpandedItems] = useState<FoundItemMatch>();
   const [questionnaire, setQuestionnaire] = useState<Questionnaire | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [details, showDetails] = useState(false);
 
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        const response = await API.get(`match/for/${matchID}/`);
-        setExpandedItems(response.data);
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       setLoading(true);
+  //       const response = await API.get(`match/for/${matchID}/`);
+  //       setExpandedItems(response.data);
+  //       console.log('match/for', response.data);
+  //       console.log('expandedItems ',expandedItems);
         
-        if (response.data) {
-          console.log('query', `verify/questionnaire/?found_item=${response.data.item.id}`);
-          const questionnaireResponse = await API.get(
-            `verify/questionnaire/?found_item=${response.data.item.id}`
-          );
-          console.log('response', questionnaireResponse.data);
-          setQuestionnaire(questionnaireResponse.data);
-        }
-      } catch (err) {
-        setError("Failed to load match details");
-        console.error('Error:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    
-    fetchData();
-  }, [matchID]);
-
-
-  // async function getVerificationQuestions (found_item_id : number){
-    
-  //   try {
-  //     const rep = await API.get(
-  //       `verify/questionnaire/${found_item_id}`
-  //     )
-  //     setQuestionnaire(rep.data)
-  //     console.log('questionnaire', rep);
-  //   } catch (error) {
-  //    console.error(error) 
+  //       if (response.data) {
+  //         console.log('query', `verify/questionnaire/?found_item=${expandedItems?.item.id}`);
+  //         const questionnaireResponse = await API.get(
+  //           `verify/questionnaire/?found_item=${response.data.item.id}`
+  //         );
+  //         console.log('questionnaireResponse', questionnaireResponse.data);
+  //         setQuestionnaire(questionnaireResponse.data);
+  //       }
+  //     } catch (err) {
+  //       setError("Failed to load match details");
+  //       console.error('Error:', err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
   //   }
-  // }
+    
+  //   fetchData();
+  // }, [matchID]);
+
+
+
+  useEffect(() => {
+  async function fetchData() {
+    try {
+      setLoading(true);
+      const response = await API.get(`match/for/${matchID}/`);
+      const data: FoundItemMatch = response.data;
+      setExpandedItems(data);
+
+      console.log('match/for', data);
+      console.log('expandedItems (corrected)', data); // use data, not expandedItems
+
+      const itemID = data.item?.id;
+      if (itemID) {
+        console.log('query', `verify/questionnaire/?found_item=${itemID}`);
+        const questionnaireResponse = await API.get(
+          `verify/questionnaire/?found_item=${itemID}`
+        );
+        console.log('questionnaireResponse', questionnaireResponse.data);
+        const d : Questionnaire = questionnaireResponse.data[0]
+        setQuestionnaire(d);
+      }
+    } catch (err) {
+      setError("Failed to load match details");
+      console.error('Error:', err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  fetchData();
+}, [matchID]);
+
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -261,7 +281,7 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
                             </div>
                             {details && (
                               <div>
-                                <QuestionAnswerList lost_item_id = {match.lost_item.item.id}/>
+                                <ItemVerification lostItemId = {match.lost_item.item.id}/>
                               </div>
                             )}
                             <CardDescription className="text-sm">
@@ -305,6 +325,7 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
             found_item_serial_id={expandedItems.serial_id} 
             itemName={expandedItems.item.name}
             found_item_id ={expandedItems.item.id}
+            questionnaire_id ={questionnaire.id}
           />
         )
       }

@@ -1,4 +1,4 @@
-import { RegisterForm } from "@/components/views/registerForm"
+import { RegisterForm } from "@/components/uix/registerForm"
 
 export default function RegisterPage() {
   return (

@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from accounts.serializers import CustomUserSimpleSerializer
 from .models import Item, SubCategory, Category, UserItem
 # from .models import Category, ItemMetadata, UserItem
 
@@ -33,6 +35,7 @@ class ItemSerializerWithCategory(serializers.ModelSerializer):
 
 class UserItemSerializer(serializers.ModelSerializer):
     item = ItemSerializerWithCategory()
+    user = CustomUserSimpleSerializer()
     class Meta:
         model = UserItem
         fields = ['id', 'user', 'serial_id','status', 'reported_date', 'item', 'updated_at']

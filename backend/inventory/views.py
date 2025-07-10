@@ -25,14 +25,14 @@ class CategoryView(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class= CategorySerializer
     lookup_field='pk'
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
 
 
 class SubCategoryView(viewsets.ModelViewSet):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
     lookup_field='pk'
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
 
 class CategoryWithSubCategoryView(viewsets.ReadOnlyModelViewSet):
     """
@@ -42,7 +42,7 @@ class CategoryWithSubCategoryView(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategoryWithSubCategorySerializer
     lookup_field = 'pk'
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
 
 # class ItemView(viewsets.ModelViewSet):
@@ -54,7 +54,7 @@ class CategoryWithSubCategoryView(viewsets.ReadOnlyModelViewSet):
 #     queryset = Item.objects.all()
 #     serializer_class = ItemSerializer
 #     lookup_field = 'pk'
-#     # permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
 #     def create(self, request, *args, **kwargs):
 #         serializer = self.get_serializer(data=request.data)
@@ -75,7 +75,7 @@ class ItemView(viewsets.ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     lookup_field = 'pk'
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         print("📥 Received POST request to create item")
@@ -124,7 +124,7 @@ class ItemView(viewsets.ModelViewSet):
 
 # class UserItemView(viewsets.ModelViewSet):
 #     serializer_class = UserItemSerializer
-#     permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 #     def get_queryset(self):
 #         # Default queryset is full list

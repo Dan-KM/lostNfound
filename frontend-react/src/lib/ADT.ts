@@ -115,3 +115,58 @@ export type Answer = {
   };
   lost_item: number;
 };
+
+
+export type FoundItemMatch = {
+  id: number;
+  serial_id: string;
+  item: {
+    id: number;
+    name: string;
+    description: string;
+    category: {
+      id: number;
+      name: string;
+    };
+    subcategory: {
+      id: number;
+      category: number;
+      name: string;
+    };
+    location: string;
+  };
+  status: string;
+  reported_date: string; // ISO 8601 date string
+  updated_at: string; // ISO 8601 date string
+  potential_matches: {
+    lost_item: {
+      id: number;
+      user: {
+        first_name: string;
+        last_name: string;
+        email: string;
+      };
+      serial_id: string;
+      status: string;
+      reported_date: string;
+      item: {
+        id: number;
+        name: string;
+        description: string;
+        category: {
+          id: number;
+          name: string;
+        };
+        subcategory: {
+          id: number;
+          category: number;
+          name: string;
+        };
+        location: string;
+      };
+      updated_at: string;
+    };
+    score: number;
+    status: string;
+  }[];
+};

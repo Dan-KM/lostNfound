@@ -42,7 +42,7 @@ const data = {
       id: "verification",
       title: "Verification",
       icon: BookOpen,
-      allowedRoles: ["admin", "manager"],
+      allowedRoles: ["admin", "manager", "claimant",]
     },
     {
       id: "manager",

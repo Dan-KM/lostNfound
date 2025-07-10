@@ -22,7 +22,22 @@ class VerificationQuestion(models.Model):
         return f"Q: {self.question_text}"
 
 class VerificationAnswers(models.Model):
+    # Status choices
+    PENDING = 'pending'
+    APPROVED = 'approved'
+    REJECTED = 'rejected'
+    STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'),
+        (REJECTED, 'Rejected'),
+    ]
+
     question = models.ForeignKey(VerificationQuestion, on_delete=models.CASCADE, related_name='question')
     lost_item = models.ForeignKey(UserItem, on_delete=models.CASCADE, related_name="answers")
-    answer_text = models.TextField()
+    answer_text = models.TextField(null=True, blank= True)
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default=PENDING,
+    )

@@ -10,6 +10,14 @@ type VerificationQuestion = {
     question: string;
 };
 
+type VerificationQuestionFormData = {
+    id?: number; // optional for new entries
+    questionnaire: number;
+    question_text: string;
+    is_required: boolean;
+};
+
+
 
 type QuestionnaireResponse = {
     id: number;
@@ -25,26 +33,31 @@ type QuestionnaireResponse = {
 const VerificationQuestions = ({ 
     found_item_serial_id, 
     found_item_id, 
-    itemName, 
+    itemName,
+    questionnaire_id 
 }: { 
     found_item_serial_id: string; 
     itemName: string; 
-    found_item_id: number
+    found_item_id: number,
+    questionnaire_id : number
 }) => {
     const [questions, setQuestions] = useState<VerificationQuestion[]>([]);
     const [newQuestion, setNewQuestion] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [hasInitialQuestions, setHasInitialQuestions] = useState<boolean>(false);
 
-    // Fetch initial questions when component mounts
-    // Fetch initial questions when component mounts
     useEffect(() => {
+        console.log(found_item_serial_id, 
+    found_item_id, 
+    itemName,
+    questionnaire_id );
         const fetchInitialQuestions = async () => {
             try {
                 setIsLoading(true);
                 const response = await API.get<QuestionnaireResponse>(
-                    `verify/questionnaire/?found_item=${found_item_id}`
+                    `verify/question/?found_item=${found_item_id}`
                 );
+
                 
                 if (response.data?.length > 0 && response.data[0].questions?.length > 0) {
                     const initialQuestions = response.data[0].questions.map(q => ({
@@ -79,10 +92,6 @@ const VerificationQuestions = ({
         }
     }
 
-    // function handleDeleteQuestion(id: number) {
-    //     setQuestions(prev => prev.filter(q => q.id !== id));
-    // }
-
     async function handleDeleteQuestion(id: number) {
     const confirmDelete = window.confirm("Are you sure you want to delete this question?");
     if (!confirmDelete) return;
@@ -107,137 +116,58 @@ const VerificationQuestions = ({
         }
     }
 
-    // async function handleSaveQuestion() {
-    //     if (questions.length === 0) return;
-
-    //     setIsLoading(true);
-    //     const vquestions: verificationQuestionType = {
-    //         found_item_serial_id: found_item_serial_id,
-    //         questions: questions.map(q => q.question)
-    //     };
-
-    //     try {
-    //         let response;
-    //         if (hasInitialQuestions) {
-    //             // Use PUT for updates
-    //             response = await API.put('verify/question/', vquestions);
-    //         } else {
-    //             // Use POST for new questions
-    //             response = await API.post('verify/question/', vquestions);
-    //         }
-    //         console.log("Success:", response.data);
-    //         alert("Questionnaire saved successfully!");
-    //         setHasInitialQuestions(true); // Mark as having initial questions after first save
-            
-    //         // Refresh questions after save
-    //         const questionnaireResponse = await API.get(
-    //             `verify/questionnaire/?found_item=${found_item_serial_id}`
-    //         );
-    //         if (questionnaireResponse.data?.questions?.length) {
-    //             const updatedQuestions = questionnaireResponse.data.questions.map((q: any) => ({
-    //                 id: q.id,
-    //                 question: q.question_text,
-    //             }));
-    //             setQuestions(updatedQuestions);
-    //         }
-    //     } catch (error: any) {
-    //         console.error("Error saving questionnaire:", error);
-    //         alert(`Failed to save questionnaire: ${error.message}`);
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
-
-    // async function handleSaveQuestion() {
-    //     if (questions.length === 0) return;
-
-    //     setIsLoading(true);
-    //     const payload = {
-    //         found_item_serial_id: found_item_serial_id,
-    //         questions: questions.map(q => ({
-    //             question_text: q.question,
-    //         }))
-    //     };
-
-    //     try {
-    //         let response;
-    //         if (hasInitialQuestions) {
-    //             // Use PUT for updates
-    //             response = await API.put(`verify/question/bulk-update/`, payload);
-    //         } else {
-    //             // Use POST for new questions
-    //             response = await API.post('verify/question/', payload);
-    //         }
-            
-    //         console.log("Save successful:", response.data);
-    //         alert("Questions saved successfully!");
-    //         setHasInitialQuestions(true);
-            
-    //         // Refresh questions
-    //         const refreshResponse = await API.get<QuestionnaireResponse>(
-    //             `verify/questionnaire/?found_item=${found_item_serial_id}`
-    //         );
-            
-    //         if (refreshResponse.data?.length > 0 && refreshResponse.data[0].questions?.length > 0) {
-    //             const updatedQuestions = refreshResponse.data[0].questions.map(q => ({
-    //                 id: q.id,
-    //                 question: q.question_text,
-    //                 is_required: q.is_required
-    //             }));
-    //             setQuestions(updatedQuestions);
-    //         }
-    //     } catch (error: any) {
-    //         console.error("Error saving questions:", error);
-    //         alert(`Failed to save questions: ${error.response?.data?.message || error.message}`);
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
 
     async function handleSaveQuestion() {
-    if (questions.length === 0) return;
+        if (questions.length === 0) return;
 
-    setIsLoading(true);
+        setIsLoading(true);
 
-    const payload = {
-        found_item_serial_id: found_item_serial_id,
-        questions: questions.map(q => q.question)  // 🔧 FIXED: send strings only
-    };
+        const payloads : VerificationQuestionFormData [] = []
+        questions.forEach(q => {
+            payloads.push({
+                id: q.id, // include id even if it's new
+                questionnaire: questionnaire_id,
+                question_text: q.question,
+                is_required: true
+            });
+        });
 
-    try {
-        let response;
-        if (hasInitialQuestions) {
-            // Use PUT for updates
-            response = await API.put(`verify/question/bulk-update/`, payload);
-        } else {
-            // Use POST for new questions
-            response = await API.post('verify/question/', payload);
+        try {
+            let response;
+            if (hasInitialQuestions) {
+                // Use PUT for updates
+                console.log(payloads);
+                response = await API.put(`verify/question/`, payloads);
+                
+            } else {
+                console.log(payloads);
+                response = await API.post('verify/question/', payloads);
+            }
+
+            // console.log("Save successful:", response.data);
+            alert("Questions saved successfully!");
+            setHasInitialQuestions(true);
+
+            // Refresh questions
+            const refreshResponse = await API.get<QuestionnaireResponse>(
+                `verify/questionnaire/?found_item=${found_item_id}`
+            );
+
+            if (refreshResponse.data?.length > 0 && refreshResponse.data[0].questions?.length > 0) {
+                const updatedQuestions = refreshResponse.data[0].questions.map(q => ({
+                    id: q.id,
+                    question: q.question_text,
+                    is_required: q.is_required
+                }));
+                setQuestions(updatedQuestions);
+            }
+        } catch (error: any) {
+            console.error("Error saving questions:", error);
+            alert(`Failed to save questions: ${error.response?.data?.message || error.message}`);
+        } finally {
+            setIsLoading(false);
         }
-
-        console.log("Save successful:", response.data);
-        alert("Questions saved successfully!");
-        setHasInitialQuestions(true);
-
-        // Refresh questions
-        const refreshResponse = await API.get<QuestionnaireResponse>(
-            `verify/questionnaire/?found_item=${found_item_serial_id}`
-        );
-
-        if (refreshResponse.data?.length > 0 && refreshResponse.data[0].questions?.length > 0) {
-            const updatedQuestions = refreshResponse.data[0].questions.map(q => ({
-                id: q.id,
-                question: q.question_text,
-                is_required: q.is_required
-            }));
-            setQuestions(updatedQuestions);
-        }
-    } catch (error: any) {
-        console.error("Error saving questions:", error);
-        alert(`Failed to save questions: ${error.response?.data?.message || error.message}`);
-    } finally {
-        setIsLoading(false);
     }
-}
 
     return (
         <Card className="bg-white shadow-sm border border-slate-200">

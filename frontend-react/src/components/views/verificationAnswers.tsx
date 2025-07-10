@@ -2,228 +2,235 @@ import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Pencil, Check, X, Loader2 } from 'lucide-react';
+import { Pencil, Check, X, Loader2, HelpCircle } from 'lucide-react';
 import { API } from '@/lib/API';
+import { useAuth } from '@/hooks/useAuthProvider';
+
+interface User {
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
+interface Category {
+  id: number;
+  name: string;
+}
+
+interface Subcategory {
+  id: number;
+  category: number;
+  name: string;
+}
+
+interface Item {
+  id: number;
+  name: string;
+  description: string;
+  category: Category;
+  subcategory: Subcategory;
+  location: string;
+}
+
+interface LostItem {
+  id: number;
+  user: User;
+  serial_id: string;
+  status: string;
+  reported_date: string;
+  item: Item;
+  updated_at: string;
+}
 
 interface Question {
   id: number;
-  text: string;
+  question_text: string;
   is_required: boolean;
-  questionnaire: number;
 }
 
-interface QuestionAnswer {
+interface VerificationAnswer {
   id: number;
+  status: string;
   answer_text: string;
   created_at: string;
   question: Question;
-  lost_item: number;
+  lost_item: LostItem;
 }
 
-interface QuestionAnswerItemProps {
-  data: QuestionAnswer;
+const AnswerItem: React.FC<{
+  answer: VerificationAnswer;
   index: number;
-  userRole?: string;
-  onAnswerUpdate?: (answerId: number, newValue: string) => void;
-}
-
-const QuestionAnswerItem: React.FC<QuestionAnswerItemProps> = ({ 
-  data,
-  index,
-  userRole = 'claimant',
-  onAnswerUpdate = () => {} 
-}) => {
+  onUpdate: (updatedAnswer: VerificationAnswer) => Promise<void>;
+  canEdit: boolean;
+}> = ({ answer, index, onUpdate, canEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editValue, setEditValue] = useState(data?.answer_text || '');
-  const [saving, setSaving] = useState(false);
-
-  const canEdit = userRole === 'claimant';
-
-  const handleEdit = () => {
-    setIsEditing(true);
-    setEditValue(data.answer_text);
-  };
+  const [editValue, setEditValue] = useState(answer.answer_text);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSave = async () => {
+    if (answer.question.is_required && !editValue.trim()) {
+      setError('This answer is required');
+      return;
+    }
+
     try {
-      setSaving(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
+      setIsSaving(true);
+      const updatedAnswer = {
+        ...answer,
+        answer_text: editValue,
+        status: 'submitted'
+      };
+      await onUpdate(updatedAnswer);
       setIsEditing(false);
-      onAnswerUpdate(data.id, editValue);
     } catch (err) {
-      console.error('Failed to save:', err);
+      setError('Failed to save answer');
     } finally {
-      setSaving(false);
+      setIsSaving(false);
     }
   };
 
   const handleCancel = () => {
-    setEditValue(data.answer_text);
+    setEditValue(answer.answer_text);
     setIsEditing(false);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSave();
-    } else if (e.key === 'Escape') {
-      handleCancel();
-    }
+    setError('');
   };
 
   return (
-    <div className="p-4 bg-slate-50 rounded-lg">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
-            <p className="font-medium text-slate-800">
-              Question {index + 1}: {data.question.text}
-            </p>
-            {data.question.is_required && (
-              <Badge variant="destructive" className="text-xs">
-                Required
-              </Badge>
-            )}
+    <div className="p-4 bg-white rounded-lg border border-slate-200 shadow-sm">
+      <div className="flex items-start gap-3">
+        <div className="mt-0.5 text-blue-500">
+          <HelpCircle className="h-4 w-4" />
+        </div>
+        
+        <div className="flex-1 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <h4 className="font-medium text-slate-800">
+                Q{index + 1}: {answer.question.question_text}
+              </h4>
+              {answer.question.is_required && (
+                <Badge variant="destructive" className="text-xs px-2 py-0.5">
+                  Required
+                </Badge>
+              )}
+            </div>
+            <span className="text-xs text-slate-500">
+              {new Date(answer.created_at).toLocaleDateString()}
+            </span>
           </div>
-          
+
           {isEditing ? (
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-sm text-slate-600 font-medium">Answer:</span>
+            <div className="space-y-2">
               <Input
                 value={editValue}
                 onChange={(e) => setEditValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className="h-8 text-sm flex-1"
-                placeholder="Enter answer..."
-                disabled={saving}
+                className="h-9"
+                disabled={isSaving}
                 autoFocus
               />
-              <Button
-                size="sm"
-                onClick={handleSave}
-                disabled={saving || !editValue.trim()}
-                className="h-8 px-2"
-              >
-                {saving ? (
-                  <Loader2 className="h-3 w-3 animate-spin" />
-                ) : (
-                  <Check className="h-3 w-3" />
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleCancel}
-                disabled={saving}
-                className="h-8 px-2"
-              >
-                <X className="h-3 w-3" />
-              </Button>
+              {error && <p className="text-xs text-red-500">{error}</p>}
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  onClick={handleSave}
+                  disabled={isSaving}
+                >
+                  {isSaving ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                  ) : (
+                    <Check className="h-4 w-4 mr-1" />
+                  )}
+                  Save
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCancel}
+                  disabled={isSaving}
+                >
+                  <X className="h-4 w-4 mr-1" />
+                  Cancel
+                </Button>
+              </div>
             </div>
           ) : (
-            data.answer_text && (
-              <div className="flex items-center gap-2 mt-2">
-                <p className="text-sm text-slate-600">
-                  <strong>Answer:</strong> {data.answer_text}
-                </p>
-                {canEdit && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleEdit}
-                    className="h-6 px-2 text-slate-400 hover:text-slate-600"
-                  >
-                    <Pencil className="h-3 w-3" />
-                  </Button>
-                )}
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-slate-600 mb-1">Your answer:</p>
+                <p className="text-slate-800">{answer.answer_text}</p>
               </div>
-            )
-          )}
-          
-          {!data.answer_text && !isEditing && canEdit && (
-            <div className="mt-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleEdit}
-                className="h-8 text-sm"
-              >
-                Add Answer
-              </Button>
+              {canEdit && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsEditing(true)}
+                  className="text-slate-500 hover:text-slate-700"
+                >
+                  <Pencil className="h-4 w-4" />
+                </Button>
+              )}
             </div>
           )}
-        </div>
-        
-        <div className="text-xs text-slate-500 ml-4">
-          ID: {data.id}
         </div>
       </div>
     </div>
   );
 };
 
-interface QuestionAnswerListProps {
-  userRole?: string;
-  lost_item_id : number;
-  onAnswerUpdate?: (answerId: number, newValue: string) => void;
-}
+export const ItemVerification: React.FC<{ lostItemId: number }> = ({ lostItemId }) => {
+  const [answers, setAnswers] = useState<VerificationAnswer[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+  const { currentUser } = useAuth(); // ✅ Get current user
+  const isClaimant = currentUser?.user_role === 'claimant'; // ✅ Role check
 
-const QuestionAnswerList: React.FC<QuestionAnswerListProps> = ({ 
-  userRole = 'claimant',
-  onAnswerUpdate = () => {},
-  lost_item_id,
-}) => {
-  const [questions, setQuestions] = useState<QuestionAnswer[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchData = async () => {
+  const fetchAnswers = async () => {
     try {
-      setLoading(true);
-      const resp = await API.get(
-        `verify/answer?lost_item=${lost_item_id}`
-      )
-      setQuestions(resp.data);
+      setIsLoading(true);
+      const response = await API.get(`verify/answer/?lost_item=${lostItemId}`);
+      setAnswers(response.data || []);
     } catch (err) {
-      setError('Failed to load questions');
+      setError('Failed to load verification questions');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdateAnswer = async (updatedAnswer: VerificationAnswer) => {
+    try {
+      await API.patch(`verify/answer/${updatedAnswer.id}/`, {
+        answer_text: updatedAnswer.answer_text,
+        status: updatedAnswer.status
+      });
+      setAnswers(prev =>
+        prev.map(a => a.id === updatedAnswer.id ? updatedAnswer : a)
+      );
+    } catch (err) {
+      throw new Error('Failed to update answer');
     }
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchAnswers();
+  }, [lostItemId]);
 
-  // const handleAnswerUpdate = (answerId, newValue) => {
-  //   setQuestions(prev => prev.map(item => 
-  //     item.id === answerId 
-  //       ? { ...item, answer_text: newValue }
-  //       : item
-  //   ));
-  //   onAnswerUpdate(answerId, newValue);
-  // };
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
-        <span className="ml-2 text-slate-600">Loading questions...</span>
+        <Loader2 className="h-6 w-6 animate-spin text-blue-500 mr-2" />
+        <span className="text-slate-600">Loading verification questions...</span>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center p-6">
-        <p className="text-red-600 font-medium">Error</p>
-        <p className="text-sm text-red-500 mt-1">{error}</p>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={fetchData}
-          className="mt-3"
+      <div className="p-6 text-center">
+        <p className="text-red-600 font-medium mb-2">{error}</p>
+        <Button
+          variant="outline"
+          onClick={fetchAnswers}
         >
           Try Again
         </Button>
@@ -231,27 +238,34 @@ const QuestionAnswerList: React.FC<QuestionAnswerListProps> = ({
     );
   }
 
-  return (
 
-    <div className="space-y-4">
-      
-      {questions ?  (questions.map((q, index) => (
-        <QuestionAnswerItem
-          key={q.id}
-          data={q}
-          index={index}
-          userRole={userRole}
-          // onAnswerUpdate={handleAnswerUpdate}
-        />
-      ))):(
-        <>
-          <div className="text-center p-6">
-            <p className="text-red-600 font-medium">No Answers</p>
-          </div>
-        </>
-      )}
+
+  if (answers.length === 0) {
+    return (
+      <div className="p-6 text-center text-slate-500">
+        No verification questions found for this item.
+      </div>
+    );
+  }
+
+  const lostItem = answers[0]?.lost_item;
+
+  return (
+    <div className="space-y-6">
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-slate-800">
+          Verification Questions
+        </h3>
+        {answers.map((answer, index) => (
+          <AnswerItem
+            key={answer.id}
+            answer={answer}
+            index={index}
+            onUpdate={handleUpdateAnswer}
+            canEdit={isClaimant}
+          />
+        ))}
+      </div>
     </div>
   );
 };
-
-export default QuestionAnswerList;
