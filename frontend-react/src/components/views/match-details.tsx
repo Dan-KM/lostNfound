@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Eye, CheckCircle, Clock, AlertTriangle, Settings, Columns2, List } from "lucide-react";
+import { Bell, CheckCircle, Clock, AlertTriangle, Columns2, List } from "lucide-react";
 import { API } from "@/lib/API";
 import VerificationQuestions from "../uix/verificationQuestions";
 import type { FoundItemMatch, Questionnaire } from "@/lib/ADT";
-import { ItemVerification } from "./verificationAnswers";
+import { QuestionAnswersDisplay } from "./verificationAnswers";
 
 
 export default function MatchDetails({ matchID }: { matchID: string }) {
@@ -18,37 +18,6 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [details, showDetails] = useState(false);
-
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       setLoading(true);
-  //       const response = await API.get(`match/for/${matchID}/`);
-  //       setExpandedItems(response.data);
-  //       console.log('match/for', response.data);
-  //       console.log('expandedItems ',expandedItems);
-        
-  //       if (response.data) {
-  //         console.log('query', `verify/questionnaire/?found_item=${expandedItems?.item.id}`);
-  //         const questionnaireResponse = await API.get(
-  //           `verify/questionnaire/?found_item=${response.data.item.id}`
-  //         );
-  //         console.log('questionnaireResponse', questionnaireResponse.data);
-  //         setQuestionnaire(questionnaireResponse.data);
-  //       }
-  //     } catch (err) {
-  //       setError("Failed to load match details");
-  //       console.error('Error:', err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-    
-  //   fetchData();
-  // }, [matchID]);
-
-
 
   useEffect(() => {
   async function fetchData() {
@@ -115,27 +84,6 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
     }
   };
 
-  const getActionButton = (status: string) => {
-    switch (status) {
-      case "pending":
-        return (
-          <Button size="sm" variant="outline">
-            <Eye className="h-4 w-4 mr-2" />
-            Review Match
-          </Button>
-        );
-      case "matched":
-        return (
-          <Button size="sm" className="bg-green-600 hover:bg-green-700">
-            <CheckCircle className="h-4 w-4 mr-2" />
-            Schedule Return
-          </Button>
-        );
-      default:
-        return null;
-    }
-  };
-
   const calculatePercentage = (score: number) => {
     return Math.round(score * 100);
   };
@@ -146,41 +94,11 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
         ← Back to Matches
       </Button>
 
-      {/* <Card className="bg-white shadow-sm border border-slate-200">
-        <CardHeader>
-          <CardTitle className="text-lg text-slate-800 flex items-center">
-            <Settings className="mr-3 h-5 w-5 text-blue-600" />
-            Match Threshold Settings
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="threshold-slider" className="text-sm font-medium text-slate-700">
-                Minimum Match Percentage
-              </Label>
-              <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                {matchThreshold[0]}%
-              </Badge>
-            </div>
-            <Slider
-              id="threshold-slider"
-              min={50}
-              max={100}
-              step={5}
-              value={matchThreshold}
-              onValueChange={setMatchThreshold}
-              className="w-full"
-            />
-          </div>
-        </CardContent>
-      </Card> */}
-
       <div className="space-y-6">
         {expandedItems ? (
           <div key={expandedItems.serial_id} className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Found Item Card */}
+
               <Card className="bg-white shadow-sm border border-slate-200">
                 <CardHeader>
                   <CardTitle className="text-xl text-slate-800 flex items-center">
@@ -281,7 +199,7 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
                             </div>
                             {details && (
                               <div>
-                                <ItemVerification lostItemId = {match.lost_item.item.id}/>
+                                <QuestionAnswersDisplay lostItemID = {match.lost_item.item.id}/>
                               </div>
                             )}
                             <CardDescription className="text-sm">
@@ -318,11 +236,10 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
           </Card>
         )}
       </div>
-      { questionnaire && 
+      { questionnaire?.questions && 
         (
           expandedItems &&
           <VerificationQuestions 
-            found_item_serial_id={expandedItems.serial_id} 
             itemName={expandedItems.item.name}
             found_item_id ={expandedItems.item.id}
             questionnaire_id ={questionnaire.id}

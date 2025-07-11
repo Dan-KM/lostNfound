@@ -9,11 +9,21 @@ from inventory.serializers import UserItemSerializer, ItemSerializer
 #         model = VerificationQuestion
 #         fields = ['id', 'question_text', 'is_required']
 
-
+class simpleVerificationQuestionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VerificationQuestion
+        fields = ['id', 'questionnaire', 'question_text', 'is_required']
 
 
 class VerificationAnswerSerializer(serializers.ModelSerializer):
     # question = VerificationQuestionsSerializer()
+    # lost_item = UserItemSerializer(read_only = True)
+    class Meta:
+        model = VerificationAnswers
+        fields = ['id', 'status','answer_text', 'created_at', 'question', 'lost_item']
+
+class VerificationAnswerWithQuestionSerializer(serializers.ModelSerializer):
+    question = simpleVerificationQuestionsSerializer()
     # lost_item = UserItemSerializer(read_only = True)
     class Meta:
         model = VerificationAnswers

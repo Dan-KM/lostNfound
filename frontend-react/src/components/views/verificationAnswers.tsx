@@ -5,6 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Pencil, Check, X, Loader2, HelpCircle } from 'lucide-react';
 import { API } from '@/lib/API';
 import { useAuth } from '@/hooks/useAuthProvider';
+import type { AxiosResponse } from 'axios';
+import { Card, CardContent, CardHeader } from '../ui/card';
 
 // Interfaces (same as before)
 interface Item {
@@ -26,6 +28,14 @@ interface Question {
   is_required: boolean;
 }
 
+export interface QuestionAnswer {
+  id: number;
+  status: 'pending' | 'approved' | 'rejected';
+  answer_text: string;
+  created_at: string; // ISO 8601 datetime string
+  question: Question;
+  lost_item: number;
+}
 interface Answer {
   id: number;
   status: string;
@@ -172,9 +182,10 @@ export const ItemVerification: React.FC<{ lostItemId: number }> = ({ lostItemId 
   const isClaimant = currentUser?.user_role === 'claimant';
 
   const fetchLostItem = async () => {
+    let uri : string = 'verify/claimant/'
     try {
       setIsLoading(true);
-      const response = await API.get(`verify/claimant/`);
+      const response = await API.get(uri);
       console.log('API returned:', response.data);
 
       const items: LostItem[] = response.data;
@@ -195,25 +206,6 @@ export const ItemVerification: React.FC<{ lostItemId: number }> = ({ lostItemId 
   };
 
   const handleUpdateAnswer = async (updatedAnswer: Answer) => {
-    // try {
-    //   await API.patch(`/answers/${updatedAnswer.id}/`, {
-    //     answer_text: updatedAnswer.answer_text,
-    //     status: updatedAnswer.status
-    //   });
-
-    //   setLostItem(prev => {
-    //     if (!prev) return null;
-    //     return {
-    //       ...prev,
-    //       answers: prev.answers.map(a =>
-    //         a.id === updatedAnswer.id ? updatedAnswer : a
-    //       )
-    //     };
-    //   });
-    // } catch (err) {
-    //   console.error(err);
-    //   throw new Error('Failed to update answer');
-    // }
       setLostItem(prev => {
       if (!prev) return null;
       
@@ -301,3 +293,82 @@ export const ItemVerification: React.FC<{ lostItemId: number }> = ({ lostItemId 
     </div>
   );
 };
+
+
+
+export const QuestionAnswersDisplay = ({lostItemID}:{lostItemID : number}) => {
+  
+  const [questionAnswer, setQuestionAnswer] = useState<QuestionAnswer[]>()
+
+  const fetchLostItem = async () => {
+    try {
+      const response = await API.get(`verify/answer/?lost_item=${lostItemID}`);
+      console.log('API returned:', response.data);
+      const items: QuestionAnswer[] = response.data;
+      setQuestionAnswer(items)
+
+    } catch (err) {
+      console.error('Failed to fetch:', err);
+    } finally {
+    }
+  };
+  useEffect(()=>{
+    fetchLostItem()
+  },[])
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString();
+  };
+
+  const getStatusVariant = (status:string) => {
+    switch (status) {
+      case 'pending':
+        return 'secondary';
+      case 'approved':
+        return 'default';
+      case 'rejected':
+        return 'destructive';
+      default:
+        return 'outline';
+    }
+  };
+
+  return (
+     <div className="max-w-4xl mx-auto p-3 sm:p-6">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 text-foreground">Question Answers</h2>
+      
+      <div className="space-y-3">
+        {questionAnswer && questionAnswer.map((item) => (
+          <Card key={item.id} className="hover:shadow-md transition-shadow">
+            <CardHeader className="pb-3">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+                <Badge variant={getStatusVariant(item.status)} className="w-fit">
+                  {item.status}
+                </Badge>
+                <span className="text-xs text-muted-foreground">
+                  {formatDate(item.created_at)}
+                </span>
+              </div>
+            </CardHeader>
+            
+            <CardContent className="space-y-3">
+              <div>
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Question</span>
+                <p className="text-sm sm:text-base text-foreground mt-1">
+                  {item.question.question_text}
+                </p>
+              </div>
+              <div>
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Answer</span>
+                <div className="bg-muted p-2 rounded-md mt-1">
+                  <p className="text-sm text-foreground">{item.answer_text}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default QuestionAnswersDisplay;

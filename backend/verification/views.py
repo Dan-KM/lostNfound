@@ -8,6 +8,7 @@ from .serializers import (
     VerificationQuestionCreateSerializer,
     VerificationQuestionBulkSerializer,
     LostItemWithQuestionsSerializer,
+    VerificationAnswerWithQuestionSerializer
 )
 from .models import VerificationQuestion, VerificationAnswers, VerificationQuestionnaire
 from inventory.models import UserItem
@@ -113,9 +114,49 @@ from rest_framework.permissions import IsAuthenticated
 
 
 
+# class VerificationQuestionViewSet(viewsets.ModelViewSet):
+#     queryset = VerificationQuestion.objects.all()
+#     serializer_class = VerificationQuestionsSerializer
+
 class VerificationQuestionViewSet(viewsets.ModelViewSet):
     queryset = VerificationQuestion.objects.all()
-    serializer_class = VerificationQuestionsSerializer
+    serializer_class = VerificationQuestionBulkSerializer
+
+    @action(detail=False, methods=['put', 'post'], url_path='bulk')
+    def bulk_upsert(self, request):
+        """
+        Handle bulk creation or update of verification questions.
+        """
+        data = request.data
+
+        if not isinstance(data, list):
+            return Response({"error": "Expected a list of questions."}, status=status.HTTP_400_BAD_REQUEST)
+
+        response_data = []
+        errors = []
+
+        for item in data:
+            q_id = item.get('id')
+            if q_id:
+                try:
+                    question = VerificationQuestion.objects.get(id=q_id)
+                    serializer = self.get_serializer(question, data=item)
+                except VerificationQuestion.DoesNotExist:
+                    errors.append({"id": q_id, "error": "Question not found"})
+                    continue
+            else:
+                serializer = self.get_serializer(data=item)
+
+            if serializer.is_valid():
+                serializer.save()
+                response_data.append(serializer.data)
+            else:
+                errors.append({"id": q_id or "new", "errors": serializer.errors})
+
+        if errors:
+            return Response({"success": response_data, "errors": errors}, status=status.HTTP_207_MULTI_STATUS)
+
+        return Response(response_data, status=status.HTTP_200_OK)
 
 # class VerificationQuestionViewSet(viewsets.ModelViewSet):
 #     queryset = VerificationQuestion.objects.all()
@@ -168,7 +209,7 @@ class VerificationQuestionViewSet(viewsets.ModelViewSet):
 
 class VerificationAnswersView(viewsets.ModelViewSet):
     queryset = VerificationAnswers.objects.all()
-    serializer_class = VerificationAnswerSerializer
+    serializer_class = VerificationAnswerWithQuestionSerializer
     lookup_field = 'pk'
     filterset_class = VerificationQuestionFilter
 
@@ -182,9 +223,9 @@ class VerificationAnswersView(viewsets.ModelViewSet):
             except VerificationAnswers.DoesNotExist:
                 return Response({'error': 'Answer not found'}, status=status.HTTP_404_NOT_FOUND)
 
-            serializer = self.get_serializer(answer, data=request.data)
+            serializer = VerificationAnswerSerializer(answer, data=request.data)
         else:
-            serializer = self.get_serializer(data=request.data)
+            serializer = VerificationAnswerSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
