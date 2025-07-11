@@ -6,8 +6,9 @@ router = DefaultRouter()
 router.register('question', views.VerificationQuestionViewSet)
 router.register('answer', views.VerificationAnswersView)
 router.register('questionnaire', views.VerificationQuestionnaireView)
+# router.register('claimant', views.ClaimantLostItemsViewSet, basename='claimant-lost-items')
 
 urlpatterns = [
     path('', include(router.urls)),
-    # path('for/<str:serial_id>/', views.LostItemQnAView.as_view())
+    path('claimant/', views.ClaimantLostItemsWithQuestionsView.as_view())
 ]

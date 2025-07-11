@@ -1,21 +1,15 @@
 from rest_framework import serializers
 from .models import VerificationAnswers, VerificationQuestion, VerificationQuestionnaire
 from inventory.models import UserItem
-from inventory.serializers import UserItemSerializer
+from inventory.serializers import UserItemSerializer, ItemSerializer
 
 
-class VerificationQuestionsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = VerificationQuestion
-        fields = ['id', 'question_text', 'is_required']
+# class VerificationQuestionsSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = VerificationQuestion
+#         fields = ['id', 'question_text', 'is_required']
 
 
-class VerificationQuestionnaireSerializer(serializers.ModelSerializer):
-    questions = VerificationQuestionsSerializer(many=True, read_only=True)  # Related name
-
-    class Meta:
-        model = VerificationQuestionnaire
-        fields = ['id', 'found_item', 'created_at', 'questions']
 
 
 class VerificationAnswerSerializer(serializers.ModelSerializer):
@@ -24,6 +18,22 @@ class VerificationAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = VerificationAnswers
         fields = ['id', 'status','answer_text', 'created_at', 'question', 'lost_item']
+
+
+class VerificationQuestionsSerializer(serializers.ModelSerializer):
+    answers = VerificationAnswerSerializer(many=True, read_only=True)
+    class Meta:
+        model = VerificationQuestion
+        fields = ['id', 'question_text', 'is_required', 'answers']
+
+
+
+class VerificationQuestionnaireSerializer(serializers.ModelSerializer):
+    questions = VerificationQuestionsSerializer(many=True, read_only=True)  # Related name
+
+    class Meta:
+        model = VerificationQuestionnaire
+        fields = ['id', 'found_item', 'created_at', 'questions']
 
 
 class VerificationAnswerListSerializer(serializers.Serializer):
@@ -94,3 +104,69 @@ class VerificationQuestionBulkSerializer(serializers.ModelSerializer):
         model = VerificationQuestion
         fields = ['id', 'questionnaire', 'question_text', 'is_required']
         list_serializer_class = BulkVerificationQuestionSerializer
+
+
+
+#=========================== some new stuff ===========================
+
+# class LostItemWithQuestionsSerializer(serializers.ModelSerializer):
+#     questions = serializers.SerializerMethodField()
+#     item = ItemSerializer()
+#     answers = serializers.SerializerMethodField()
+#     class Meta:
+#         model = UserItem
+#         fields = ['id', 'serial_id', 'item', 'questions', 'answers']
+
+#     def get_questions(self, obj):
+#         questions = []
+
+#         for match in obj.lost_item_matches.all():
+#             found_item = match.found_item
+#             questionnaire = getattr(found_item, 'questionnaire', None)
+#             if questionnaire:
+#                 qs = questionnaire.questions.all()
+#                 questions.extend(VerificationQuestionSerializer(qs, many=True).data)
+
+#         return questions
+    
+#     def get_answers(self, obj):
+#         answers = []
+#         for match in obj.lost_item_matches.all():
+#             lost_item = match.lost_item
+#             answer = getattr(lost_item, 'lost_item_answers', None)
+#             if answer:
+#                 answers.extend(VerificationQuestionSerializer(answer, many=True).data)
+
+#         return answers
+
+
+class LostItemWithQuestionsSerializer(serializers.ModelSerializer):
+    item = ItemSerializer()
+    questions = serializers.SerializerMethodField()
+    answers = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserItem
+        fields = ['id', 'serial_id', 'item', 'questions', 'answers']
+
+    def get_questions(self, obj):
+        questions = []
+        for match in obj.lost_item_matches.all():
+            questionnaire = getattr(match.found_item, 'questionnaire', None)
+            if questionnaire:
+                qs = questionnaire.questions.all()
+                questions.extend(VerificationQuestionSerializer(qs, many=True).data)
+        return questions
+
+    def get_answers(self, obj):
+        answers_qs = obj.lost_item_answers.all()
+        return VerificationAnswerSerializer(answers_qs, many=True).data
+
+
+
+
+
+
+
+
+

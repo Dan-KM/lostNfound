@@ -124,7 +124,7 @@ class ItemView(viewsets.ModelViewSet):
 
 # class UserItemView(viewsets.ModelViewSet):
 #     serializer_class = UserItemSerializer
-    permission_classes = [IsAuthenticated]
+#    # permission_classes = [IsAuthenticated]
 
 #     def get_queryset(self):
 #         # Default queryset is full list
@@ -144,17 +144,17 @@ class UserItemView(viewsets.ModelViewSet):
     serializer_class = UserItemSerializer
     # permission_classes = [IsAuthenticated]
 
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     if user.is_staff:
-    #         return UserItem.objects.all()
-    #     return UserItem.objects.filter(user=user)
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return UserItem.objects.all()
+        return UserItem.objects.filter(user=user)
 
-    # @action(detail=False, methods=['get'])
-    # def mine(self, request):
-    #     items = self.get_queryset().filter(user=request.user)
-    #     serializer = self.get_serializer(items, many=True)
-    #     return Response(serializer.data)
+    @action(detail=False, methods=['get'])
+    def mine(self, request):
+        items = self.get_queryset().filter(user=request.user)
+        serializer = self.get_serializer(items, many=True)
+        return Response(serializer.data)
 
 
 

@@ -32,8 +32,8 @@ class VerificationAnswers(models.Model):
         (REJECTED, 'Rejected'),
     ]
 
-    question = models.ForeignKey(VerificationQuestion, on_delete=models.CASCADE, related_name='question')
-    lost_item = models.ForeignKey(UserItem, on_delete=models.CASCADE, related_name="answers")
+    question = models.ForeignKey(VerificationQuestion, on_delete=models.CASCADE, related_name='answers')
+    lost_item = models.ForeignKey(UserItem, on_delete=models.CASCADE, related_name="lost_item_answers")
     answer_text = models.TextField(null=True, blank= True)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(

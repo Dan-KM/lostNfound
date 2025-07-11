@@ -6,94 +6,85 @@ import { Pencil, Check, X, Loader2, HelpCircle } from 'lucide-react';
 import { API } from '@/lib/API';
 import { useAuth } from '@/hooks/useAuthProvider';
 
-interface User {
-  first_name: string;
-  last_name: string;
-  email: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-}
-
-interface Subcategory {
-  id: number;
-  category: number;
-  name: string;
-}
-
+// Interfaces (same as before)
 interface Item {
   id: number;
   name: string;
   description: string;
-  category: Category;
-  subcategory: Subcategory;
+  item_image: string | null;
   location: string;
-}
-
-interface LostItem {
-  id: number;
-  user: User;
-  serial_id: string;
-  status: string;
-  reported_date: string;
-  item: Item;
-  updated_at: string;
+  item_type: string;
+  other_details: any;
+  category: number;
+  subcategory: number;
 }
 
 interface Question {
   id: number;
+  questionnaire: number;
   question_text: string;
   is_required: boolean;
 }
 
-interface VerificationAnswer {
+interface Answer {
   id: number;
   status: string;
   answer_text: string;
   created_at: string;
-  question: Question;
-  lost_item: LostItem;
+  question: number;
+  lost_item: number;
+}
+
+interface LostItem {
+  id: number;
+  serial_id: string;
+  item: Item;
+  questions: Question[];
+  answers: Answer[];
 }
 
 const AnswerItem: React.FC<{
-  answer: VerificationAnswer;
+  answer: Answer;
+  question: Question;
   index: number;
-  onUpdate: (updatedAnswer: VerificationAnswer) => Promise<void>;
+  onUpdate: (updatedAnswer: Answer) => Promise<void>;
   canEdit: boolean;
-}> = ({ answer, index, onUpdate, canEdit }) => {
+}> = ({ answer, question, index, onUpdate, canEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(answer.answer_text);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
 
   const handleSave = async () => {
-    if (answer.question.is_required && !editValue.trim()) {
-      setError('This answer is required');
-      return;
-    }
+    if (question.is_required && !editValue.trim()) {
+    setError("This answer is required");
+    return;
+  }
 
-    try {
-      setIsSaving(true);
-      const updatedAnswer = {
-        ...answer,
+  try {
+    setIsSaving(true);
+
+    // Use PUT for both creation and updates
+    const response = await API.put(
+      `verify/answer/put-answer/`,
+      {
+        id: answer.id !== 0 ? answer.id : undefined, // Include only if editing existing
+        question: question.id,
+        lost_item: answer.lost_item,
         answer_text: editValue,
-        status: 'submitted'
-      };
-      await onUpdate(updatedAnswer);
-      setIsEditing(false);
-    } catch (err) {
-      setError('Failed to save answer');
-    } finally {
-      setIsSaving(false);
-    }
-  };
+        status: "pending",
+      }
+    );
 
-  const handleCancel = () => {
-    setEditValue(answer.answer_text);
+
+    // Update local state
+    onUpdate(response.data);
     setIsEditing(false);
-    setError('');
+  } catch (err) {
+    setError("Failed to save answer");
+  } finally {
+    setIsSaving(false);
+  }
   };
 
   return (
@@ -102,14 +93,13 @@ const AnswerItem: React.FC<{
         <div className="mt-0.5 text-blue-500">
           <HelpCircle className="h-4 w-4" />
         </div>
-        
         <div className="flex-1 space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <h4 className="font-medium text-slate-800">
-                Q{index + 1}: {answer.question.question_text}
+                Q{index + 1}: {question.question_text}
               </h4>
-              {answer.question.is_required && (
+              {question.is_required && (
                 <Badge variant="destructive" className="text-xs px-2 py-0.5">
                   Required
                 </Badge>
@@ -131,11 +121,7 @@ const AnswerItem: React.FC<{
               />
               {error && <p className="text-xs text-red-500">{error}</p>}
               <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  onClick={handleSave}
-                  disabled={isSaving}
-                >
+                <Button size="sm" onClick={handleSave} disabled={isSaving}>
                   {isSaving ? (
                     <Loader2 className="h-4 w-4 animate-spin mr-1" />
                   ) : (
@@ -146,7 +132,7 @@ const AnswerItem: React.FC<{
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={handleCancel}
+                  onClick={() => setIsEditing(false)}
                   disabled={isSaving}
                 >
                   <X className="h-4 w-4 mr-1" />
@@ -158,7 +144,7 @@ const AnswerItem: React.FC<{
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm text-slate-600 mb-1">Your answer:</p>
-                <p className="text-slate-800">{answer.answer_text}</p>
+                <p className="text-slate-800">{answer.answer_text || '—'}</p>
               </div>
               {canEdit && (
                 <Button
@@ -179,40 +165,72 @@ const AnswerItem: React.FC<{
 };
 
 export const ItemVerification: React.FC<{ lostItemId: number }> = ({ lostItemId }) => {
-  const [answers, setAnswers] = useState<VerificationAnswer[]>([]);
+  const [lostItem, setLostItem] = useState<LostItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const { currentUser } = useAuth(); // ✅ Get current user
-  const isClaimant = currentUser?.user_role === 'claimant'; // ✅ Role check
+  const { currentUser } = useAuth();
+  const isClaimant = currentUser?.user_role === 'claimant';
 
-  const fetchAnswers = async () => {
+  const fetchLostItem = async () => {
     try {
       setIsLoading(true);
-      const response = await API.get(`verify/answer/?lost_item=${lostItemId}`);
-      setAnswers(response.data || []);
+      const response = await API.get(`verify/claimant/`);
+      console.log('API returned:', response.data);
+
+      const items: LostItem[] = response.data;
+      const match = items.find(i => i.id === lostItemId);
+
+      if (!match) {
+        setError('Lost item not found.');
+        setLostItem(null);
+      } else {
+        setLostItem(match);
+      }
     } catch (err) {
-      setError('Failed to load verification questions');
+      console.error('Failed to fetch:', err);
+      setError('Failed to load lost item details');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleUpdateAnswer = async (updatedAnswer: VerificationAnswer) => {
-    try {
-      await API.patch(`verify/answer/${updatedAnswer.id}/`, {
-        answer_text: updatedAnswer.answer_text,
-        status: updatedAnswer.status
-      });
-      setAnswers(prev =>
-        prev.map(a => a.id === updatedAnswer.id ? updatedAnswer : a)
-      );
-    } catch (err) {
-      throw new Error('Failed to update answer');
-    }
+  const handleUpdateAnswer = async (updatedAnswer: Answer) => {
+    // try {
+    //   await API.patch(`/answers/${updatedAnswer.id}/`, {
+    //     answer_text: updatedAnswer.answer_text,
+    //     status: updatedAnswer.status
+    //   });
+
+    //   setLostItem(prev => {
+    //     if (!prev) return null;
+    //     return {
+    //       ...prev,
+    //       answers: prev.answers.map(a =>
+    //         a.id === updatedAnswer.id ? updatedAnswer : a
+    //       )
+    //     };
+    //   });
+    // } catch (err) {
+    //   console.error(err);
+    //   throw new Error('Failed to update answer');
+    // }
+      setLostItem(prev => {
+      if (!prev) return null;
+      
+      // Replace existing answer or add new one
+      const updatedAnswers = prev.answers?.some(a => a.id === updatedAnswer.id)
+        ? prev.answers.map(a => a.id === updatedAnswer.id ? updatedAnswer : a)
+        : [...(prev.answers || []), updatedAnswer];
+
+      return {
+        ...prev,
+        answers: updatedAnswers,
+      };
+    });
   };
 
   useEffect(() => {
-    fetchAnswers();
+    fetchLostItem();
   }, [lostItemId]);
 
   if (isLoading) {
@@ -228,19 +246,34 @@ export const ItemVerification: React.FC<{ lostItemId: number }> = ({ lostItemId 
     return (
       <div className="p-6 text-center">
         <p className="text-red-600 font-medium mb-2">{error}</p>
-        <Button
-          variant="outline"
-          onClick={fetchAnswers}
-        >
+        <Button variant="outline" onClick={fetchLostItem}>
           Try Again
         </Button>
       </div>
     );
   }
 
+  if (!lostItem) {
+    return (
+      <div className="p-6 text-center text-slate-500">
+        Item not found.
+      </div>
+    );
+  }
 
+  const questionAnswerPairs = (lostItem.questions || []).map(question => {
+    const answer = (lostItem.answers || []).find(a => a.question === question.id) || {
+      id: 0,
+      status: 'pending',
+      answer_text: '',
+      created_at: new Date().toISOString(),
+      question: question.id,
+      lost_item: lostItem.id
+    };
+    return { question, answer };
+  });
 
-  if (answers.length === 0) {
+  if (questionAnswerPairs.length === 0) {
     return (
       <div className="p-6 text-center text-slate-500">
         No verification questions found for this item.
@@ -248,18 +281,17 @@ export const ItemVerification: React.FC<{ lostItemId: number }> = ({ lostItemId 
     );
   }
 
-  const lostItem = answers[0]?.lost_item;
-
   return (
     <div className="space-y-6">
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-slate-800">
           Verification Questions
         </h3>
-        {answers.map((answer, index) => (
+        {questionAnswerPairs.map(({ question, answer }, index) => (
           <AnswerItem
-            key={answer.id}
+            key={question.id}
             answer={answer}
+            question={question}
             index={index}
             onUpdate={handleUpdateAnswer}
             canEdit={isClaimant}

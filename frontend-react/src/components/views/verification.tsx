@@ -50,7 +50,7 @@ const MyLostItemsVerificationList: React.FC = () => {
   const fetchMyItems = async () => {
     try {
       setIsLoading(true);
-      const response = await API.get('/inventory/user-item/mine/');
+      const response = await API.get('inventory/user-item/mine/');
       
       setMyItems(response.data || []);
     } catch (err) {

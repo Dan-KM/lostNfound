@@ -6,13 +6,17 @@ from .serializers import (
     VerificationQuestionsSerializer,
     VerificationAnswerSerializer,
     VerificationQuestionCreateSerializer,
-    VerificationQuestionBulkSerializer
+    VerificationQuestionBulkSerializer,
+    LostItemWithQuestionsSerializer,
 )
 from .models import VerificationQuestion, VerificationAnswers, VerificationQuestionnaire
 from inventory.models import UserItem
 
 from rest_framework.response import Response
 from rest_framework.decorators import action
+
+from rest_framework.permissions import IsAuthenticated
+
 
 
 # Create your views here.
@@ -111,44 +115,55 @@ from rest_framework.decorators import action
 
 class VerificationQuestionViewSet(viewsets.ModelViewSet):
     queryset = VerificationQuestion.objects.all()
-    serializer_class = VerificationQuestionBulkSerializer
+    serializer_class = VerificationQuestionsSerializer
 
-    def create(self, request, *args, **kwargs):
-        is_many = isinstance(request.data, list)
-        serializer = self.get_serializer(data=request.data, many=is_many)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response(serializer.data, status=201)
+# class VerificationQuestionViewSet(viewsets.ModelViewSet):
+#     queryset = VerificationQuestion.objects.all()
+#     serializer_class = VerificationQuestionBulkSerializer
+
+#     def create(self, request, *args, **kwargs):
+#         is_many = isinstance(request.data, list)
+#         serializer = self.get_serializer(data=request.data, many=is_many)
+#         serializer.is_valid(raise_exception=True)
+#         self.perform_create(serializer)
+#         return Response(serializer.data, status=201)
     
-    def update(self, request, *args, **kwargs):
-        is_many = isinstance(request.data, list)
-        if not is_many:
-            return super().update(request, *args, **kwargs)
+#     def update(self, request, *args, **kwargs):
+#         is_many = isinstance(request.data, list)
+#         if not is_many:
+#             return super().update(request, *args, **kwargs)
 
-        # Split data
-        update_data = [item for item in request.data if 'id' in item]
-        create_data = [item for item in request.data if 'id' not in item]
+#         # Split data
+#         update_data = [item for item in request.data if 'id' in item]
+#         create_data = [item for item in request.data if 'id' not in item]
 
-        response_data = []
+#         response_data = []
 
-        # Handle updates
-        if update_data:
-            ids = [item['id'] for item in update_data]
-            existing_instances = VerificationQuestion.objects.filter(id__in=ids)
+#         # Handle updates
+#         if update_data:
+#             ids = [item['id'] for item in update_data]
+#             existing_instances = VerificationQuestion.objects.filter(id__in=ids)
 
-            serializer = self.get_serializer(existing_instances, data=update_data, many=True)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            response_data.extend(serializer.data)
+#             serializer = self.get_serializer(existing_instances, data=update_data, many=True)
+#             serializer.is_valid(raise_exception=True)
+#             serializer.save()
+#             response_data.extend(serializer.data)
 
-        # Handle creations
-        if create_data:
-            serializer = self.get_serializer(data=create_data, many=True)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            response_data.extend(serializer.data)
+#         # Handle creations
+#         if create_data:
+#             serializer = self.get_serializer(data=create_data, many=True)
+#             serializer.is_valid(raise_exception=True)
+#             serializer.save()
+#             response_data.extend(serializer.data)
 
-        return Response(response_data, status=status.HTTP_200_OK)
+#         return Response(response_data, status=status.HTTP_200_OK)
+
+
+# class VerificationAnswersView(viewsets.ModelViewSet):
+#     queryset = VerificationAnswers.objects.all()
+#     serializer_class = VerificationAnswerSerializer
+#     lookup_field = 'pk'
+#     filterset_class = VerificationQuestionFilter
 
 
 class VerificationAnswersView(viewsets.ModelViewSet):
@@ -157,9 +172,98 @@ class VerificationAnswersView(viewsets.ModelViewSet):
     lookup_field = 'pk'
     filterset_class = VerificationQuestionFilter
 
+    @action(detail=False, methods=['put'], url_path='put-answer')
+    def put_answer(self, request):
+        answer_id = request.data.get('id', None)
+        
+        if answer_id:
+            try:
+                answer = VerificationAnswers.objects.get(id=answer_id)
+            except VerificationAnswers.DoesNotExist:
+                return Response({'error': 'Answer not found'}, status=status.HTTP_404_NOT_FOUND)
+
+            serializer = self.get_serializer(answer, data=request.data)
+        else:
+            serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        # ✅ Add this for debugging
+        print("Validation errors:", serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class VerificationQuestionnaireView(viewsets.ModelViewSet):
     queryset = VerificationQuestionnaire.objects.all()
     serializer_class = VerificationQuestionnaireSerializer
     lookup_field = 'pk'
     filterset_class = VerificationQuestionnaireFilter
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# new Stuff
+
+class ClaimantLostItemsViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = LostItemWithQuestionsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        UserItem.objects.filter(user=self.request.user).prefetch_related(
+            'lost_item_matches__found_item__questionnaire__questions'
+        )
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .models import UserItem
+from .serializers import LostItemWithQuestionsSerializer
+
+# class ClaimantLostItemsWithQuestionsView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request):
+#         user = request.user
+#         print(f"🔍 Logged in as: {user}")
+
+#         # Fetch only lost items submitted by this user
+#         lost_items = UserItem.objects.filter(user=user)
+#         print(f"📦 Found {lost_items.count()} lost items for user {user.first_name}")
+
+#         # Prefetch everything needed to avoid N+1 query problem
+#         lost_items = lost_items.prefetch_related(
+#             'lost_item_matches__found_item__questionnaire__questions'
+#         )
+
+#         # Serialize the results
+#         serializer = LostItemWithQuestionsSerializer(lost_items, many=True)
+
+#         print("✅ Serialization complete. Returning data to frontend.")
+#         return Response(serializer.data)
+
+
+class ClaimantLostItemsWithQuestionsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        claimant = request.user
+        lost_items = UserItem.objects.filter(user=claimant).prefetch_related(
+            'lost_item_matches__found_item__questionnaire__questions',
+            'lost_item_answers__question',
+        )
+        serializer = LostItemWithQuestionsSerializer(lost_items, many=True)
+        return Response(serializer.data)
