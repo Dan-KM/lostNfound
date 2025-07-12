@@ -19,6 +19,26 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
   const [loading, setLoading] = useState(true);
   const [details, showDetails] = useState(false);
 
+  async function handleMatchStatusUpdate(matchId: number, newStatus: string) {
+    try {
+        const response = await API.patch(
+            `match/${matchId}/update-status/`,
+            { status: newStatus }
+        );
+
+        console.log("Match status updated:", response.data);
+
+        // Optional: show toast, alert, or refresh matches list
+        // Example: toast.success("Status updated and duplicates removed!");
+        // getMatches(); // if you have a function to reload match list
+
+    } catch (error) {
+        console.error("Error updating match status:", error);
+        // Optionally show a user-friendly error message
+    }
+}
+
+
   useEffect(() => {
   async function fetchData() {
     try {
@@ -206,13 +226,20 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
                               {lostItem.item.description}
                             </CardDescription>
                             
-                            <div className="pt-2">
-                              <Button onClick={()=>{
-                                showDetails(!details)
-                              }}>
+                            <div className="pt-2 flex flex-col gap-4">
+                              <Button 
+                                onClick={()=>{
+                                  showDetails(!details)
+                                }}
+                                className="w-full"
+                                variant='secondary'
+                              >
                                 {!details? ('View Details'):('hide details')}
                               </Button>
-                              <Button>
+                              <Button 
+                                onClick={() => handleMatchStatusUpdate(expandedItems.found_item_matches[index], "confirmed")}
+                                className="w-full bg-green-400"
+                              >
                                 Approve Match
                               </Button>
                             </div>

@@ -38,7 +38,7 @@ const MatchMenu = () => {
   useEffect(()=>{
     async function getMatches (){
       const resp = await  API.get(
-        'match/summary/'
+        'match/summary/?status=pending'
       )
       setAllFoundItems(resp.data)
     }
@@ -62,7 +62,7 @@ const MatchMenu = () => {
           Found Item Matches
         </div>
         <div
-          className="space-y-6 overflow-y-auto max-h-[calc(72svh)] scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-50"
+          className="space-y-6 overflow-y-auto max-h-[80svh] scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-50"
         >
           {filteredItems && filteredItems.map((item) => (
         <div key={item.found_item.serial_id} className="space-y-4"

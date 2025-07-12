@@ -118,6 +118,7 @@ export type Answer = {
 
 
 export type FoundItemMatch = {
+  found_item_matches : number[],
   id: number;
   serial_id: string;
   item: {

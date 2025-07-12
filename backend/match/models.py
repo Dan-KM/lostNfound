@@ -16,6 +16,7 @@ class LostFoundMatch(models.Model):
         choices=[
             ('pending', 'Pending'),
             ('confirmed', 'Confirmed'),
+            ('resolved', 'Resolved'),
             ('rejected', 'Rejected'),
             ('expired', 'Expired'),
         ],

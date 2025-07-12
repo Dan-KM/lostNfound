@@ -7,6 +7,7 @@ class VectorDB:
     def __init__(self):
         self.lost_items_collection = client.get_or_create_collection(name="lost_items")
         self.found_items_collection = client.get_or_create_collection(name="found_items")
+        self.THRESHOLD = 0.7
 
 
     def make_description(self, user_item: UserItem) -> str:
@@ -54,7 +55,8 @@ class VectorDB:
 
 
 
-    def find_matches_with_serial_id(self, query_item_id: str, is_lost : bool = False, threshold: float = 0.7):
+    def find_matches_with_serial_id(self, query_item_id: str, is_lost : bool = False):
+        threshold = self.THRESHOLD
         
         """
         Find matches for a lost or found item.
@@ -75,7 +77,7 @@ class VectorDB:
         
         # Get the query item's embedding
         query_item = source_collection.get(ids=[query_item_id], include=["embeddings"])
-        print("query_item -> ", query_item)
+        # print("query_item -> ", query_item)
         query_embedding = query_item["embeddings"][0]
         
         # Search for similar items in the target collection
@@ -99,7 +101,7 @@ class VectorDB:
                     "similarity": similarity,
                     "metadata": metadata
                 })
-
+        print('matches', matches)
         return matches
 
  

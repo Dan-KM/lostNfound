@@ -8,7 +8,7 @@ class LostFoundMatchSerializer (serializers.ModelSerializer):
     found_item = UserItemSerializer(read_only=True)
     class Meta: 
         model = LostFoundMatch
-        fields = ['lost_item', 'found_item', 'score', 'status', 'matched_at']
+        fields = ['id', 'lost_item', 'found_item', 'score', 'status', 'matched_at']
 
 
 class LostItemMatchSummarySerializer(serializers.ModelSerializer):
@@ -37,10 +37,24 @@ class MatchDetailSerializer(serializers.ModelSerializer):
 class FoundItemMatchSerializer(serializers.ModelSerializer):
     potential_matches = serializers.SerializerMethodField()
     item = ItemSerializer()
+    found_item_matches = serializers.SerializerMethodField()
+
     class Meta:
         model = UserItem
-        fields = ['id','serial_id', 'item', 'status', 'reported_date', 'updated_at', 'potential_matches']
+        fields = [
+            'found_item_matches',  # This will now be a list of IDs
+            'id',
+            'serial_id',
+            'item',
+            'status',
+            'reported_date',
+            'updated_at',
+            'potential_matches',
+        ]
 
+    def get_found_item_matches(self, obj):
+        return list(obj.found_item_matches.values_list('id', flat=True))
+    
     def get_potential_matches(self, obj):
         # Assuming `obj` is a found item
         matches = LostFoundMatch.objects.filter(found_item=obj).order_by('-score')

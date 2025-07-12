@@ -34,8 +34,8 @@ class ItemSerializerWithCategory(serializers.ModelSerializer):
         fields = ['id', 'name', 'description', 'category', 'subcategory', 'location']
 
 class UserItemSerializer(serializers.ModelSerializer):
-    item = ItemSerializerWithCategory()
-    user = CustomUserSimpleSerializer()
+    item = ItemSerializerWithCategory(read_only = True)
+    user = CustomUserSimpleSerializer(read_only = True)
     class Meta:
         model = UserItem
         fields = ['id', 'user', 'serial_id','status', 'reported_date', 'item', 'updated_at']

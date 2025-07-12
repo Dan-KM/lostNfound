@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 from rest_framework import viewsets
 
+from .filters import UserItemFilter
+
 from .models import Category, SubCategory, Item, UserItem
 # from .serializers import CategorySerializer, SubCategorySerializer, ItemSerializer, ItemCategorySerializer, ItemMetadataSerializer, UserItemSerializer
 from .serializers import UserItemSerializer, ItemSerializer, CategorySerializer, SubCategorySerializer, CategoryWithSubCategorySerializer
@@ -142,7 +144,8 @@ class ItemView(viewsets.ModelViewSet):
 class UserItemView(viewsets.ModelViewSet):
     queryset = UserItem.objects.all()  # Just a placeholder
     serializer_class = UserItemSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+    filterset_class = UserItemFilter
 
     def get_queryset(self):
         user = self.request.user
@@ -155,6 +158,26 @@ class UserItemView(viewsets.ModelViewSet):
         items = self.get_queryset().filter(user=request.user)
         serializer = self.get_serializer(items, many=True)
         return Response(serializer.data)
+    
+    @action(detail=True, methods=['patch'], url_path='update-status')
+    def update_status(self, request, pk=None):
+        try:
+            user_item = self.get_object()
+        except UserItem.DoesNotExist:
+            return Response({"detail": "Item not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        new_status = request.data.get("status")
+        if not new_status:
+            return Response({"detail": "Status field is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_item.status = new_status
+        user_item.save()
+
+        return Response({
+            "detail": "Status updated successfully.",
+            "id": user_item.id,
+            "status": user_item.status
+        }, status=status.HTTP_200_OK)
 
 
 
