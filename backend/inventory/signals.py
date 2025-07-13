@@ -4,7 +4,7 @@ from .models import Item, UserItem
 
 # from notification.utility import send_test_email
 
-from match.util.ItemMatcher import embed_user_item
+from match.util.ItemMatcher import embed_user_item, save_matches
 
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -32,13 +32,9 @@ def embed_item_report(sender, instance, created, **kwargs):
                     futures.append(executor.submit(embed_user_item, instance))
                     
                     # # Broadcasting
-                    # futures.append(executor.submit(
-                    #     broadcaster.publish, 
-                    #     f"New notification: {instance.item.name}"
-                    # ))
                     
                     # Save matches
-                    # futures.append(executor.submit(save_matches, userItem=instance))
+                    futures.append(executor.submit(save_matches, userItem=instance))
                     
                     # Wait for all to complete (optional)
                     # for future in futures:

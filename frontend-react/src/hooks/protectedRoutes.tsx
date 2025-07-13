@@ -12,7 +12,16 @@ export default function ProtectedRoutes ({children, allowedRoles} : ProtectedRou
     const navigate = useNavigate()
     useEffect(()=>{
         async function s(){
-            await getUser()
+            try {
+                await getUser()
+            } catch (error: any) {
+                if (error.response?.status === 401) {
+                    navigate('/auth/login');
+                } else {
+                    console.error('Error fetching user:', error);
+                }
+                navigate('/auth/login');
+            }
         }
         s()
     },[])
@@ -23,7 +32,6 @@ export default function ProtectedRoutes ({children, allowedRoles} : ProtectedRou
         }
         
         if(currentUser === null){
-            navigate('/auth/login')
             return <PermissionDenied/>
         }
 

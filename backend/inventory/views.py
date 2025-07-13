@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from .filters import UserItemFilter
 
 from .models import Category, SubCategory, Item, UserItem
-# from .serializers import CategorySerializer, SubCategorySerializer, ItemSerializer, ItemCategorySerializer, ItemMetadataSerializer, UserItemSerializer
+
 from .serializers import UserItemSerializer, ItemSerializer, CategorySerializer, SubCategorySerializer, CategoryWithSubCategorySerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,14 +14,12 @@ from rest_framework import status
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAdminUser
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 from django.db import transaction
 
-# import time
-# # from .util.broadcaster import broadcaster
-# from django.http import StreamingHttpResponse
-
+from notification.models import Notification
 
 class CategoryView(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -93,34 +91,12 @@ class ItemView(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class UserItemView(viewsets.ModelViewSet):
-#     queryset = UserItem.objects.all()
-#     serializer_class = UserItemSerializer
-#     lookup_field='pk'
-
-
-# class UserItemView(viewsets.ModelViewSet):
-#     serializer_class = UserItemSerializer
-#    # permission_classes = [IsAuthenticated]
-
-#     def get_queryset(self):
-#         # Default queryset is full list
-#         user = self.request.user
-#         if user.is_staff:
-#             return UserItem.objects.all()
-#         return UserItem.objects.filter(user=user)
-
-#     @action(detail=False, methods=['get'])
-#     def mine(self, request):
-#         items = self.get_queryset().filter(user=request.user)
-#         serializer = self.get_serializer(items, many=True)
-#         return Response(serializer.data)
-
 class UserItemView(viewsets.ModelViewSet):
-    queryset = UserItem.objects.all()  # Just a placeholder
+    queryset = UserItem.objects.none()
     serializer_class = UserItemSerializer
     permission_classes = [IsAuthenticated]
     filterset_class = UserItemFilter
+    filter_backends = [DjangoFilterBackend]
 
     def get_queryset(self):
         user = self.request.user
@@ -130,8 +106,12 @@ class UserItemView(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def mine(self, request):
-        items = self.get_queryset().filter(user=request.user)
-        serializer = self.get_serializer(items, many=True)
+        queryset = self.get_queryset().filter(user=request.user)
+
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(self.request, queryset, self)
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
     @action(detail=True, methods=['patch'], url_path='update-status')
@@ -148,60 +128,15 @@ class UserItemView(viewsets.ModelViewSet):
         user_item.status = new_status
         user_item.save()
 
+        Notification.objects.create(
+            recipient=user_item.user,
+            title="Item registered in office",
+            message=f"The item '{user_item.item.name}' you found has been received in office.",
+        )
+
         return Response({
             "detail": "Status updated successfully.",
             "id": user_item.id,
             "status": user_item.status
         }, status=status.HTTP_200_OK)
-
-
-
-# class UserItemListView(viewsets.ReadOnlyModelViewSet):
-#     """
-#     A viewset for listing UserItems per user.
-#     This viewset retrieves all UserItems associated with the currently authenticated user.
-#     """
-#     queryset = UserItem.objects.all()
-#     serializer_class = UserItemSerializer
-#     lookup_field = 'pk'
-
-#     def get_queryset(self):
-#         user = self.request.user
-#         return UserItem.objects.filter(user=user)
-
-
-
-# class ItemCreationViews(APIView):
-#     serializer_class = ItemSerializer
-#     def post(self, request):
-#         item = request.data
-#         itemSerilazer = ItemSerializer(data=item)
-#         if itemSerilazer.is_valid():
-#             with transaction.atomic():
-#                 itemSerilazer.save()
-#                 userItem = UserItem.objects.create(
-#                     item=itemSerilazer.instance,
-#                     # user=request.user,
-#                     reported_date=itemSerilazer.validated_data.get('reported_date'),
-#                     status='submitted',  # Assuming default status is 'available'
-#                 )
-#                 userItemSerializer = UserItemSerializer(userItem)
-#             return Response(userItemSerializer.data, status=status.HTTP_201_CREATED)
-#         return Response(itemSerilazer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
-# def sse_notifications(request):
-#     client_id = str(time.time())  # or use user ID if authenticated
-#     q = broadcaster.subscribe(client_id)
-
-#     def event_stream():
-#         try:
-#             while True:
-#                 data = q.get()
-#                 yield f"data: {data}\n\n"
-#         except GeneratorExit:
-#             broadcaster.unsubscribe(client_id)
-
-#     response = StreamingHttpResponse(event_stream(), content_type='text/event-stream')
-#     response['Cache-Control'] = 'no-cache'
-#     return response

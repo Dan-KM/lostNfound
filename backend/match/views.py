@@ -114,12 +114,11 @@ class LostFoundMatchView(viewsets.ModelViewSet):
                 match.status = "resolved"
                 match.save()
 
-                # Notification.objects.create(
-                #     recipient=lost_item.user,
-                #     title="Possible Match Found",
-                #     message=f"We've found a possible match for your lost item: {found_item.item.name}",
-                # )
-
+                Notification.objects.create(
+                    recipient=lost_item.user,
+                    title="Item returned successfully",
+                    message=f"The item: {found_item.item.name} has been successfully returned.",
+                )
 
                 return Response({
                     "detail": "Match resolved and items marked as returned.",

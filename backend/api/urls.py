@@ -7,4 +7,5 @@ urlpatterns = [
     path('inventory/', include('inventory.urls')),
     path('match/', include('match.urls')),
     path('verify/', include('verification.urls')),
+    path('notifications/', include('notification.urls')),
 ]

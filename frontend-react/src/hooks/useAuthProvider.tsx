@@ -63,6 +63,7 @@ export default function AuthProvider ({ children }: AuthProviderProps ) {
 
         }catch(error){
             setCurrentUser(null)
+            throw error
         }
         return currentUser
     }
