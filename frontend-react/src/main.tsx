@@ -10,6 +10,7 @@ import AuthProvider from './hooks/useAuthProvider.tsx'
 import Admin from '@/page/DashboardPage'
 import EmailApp from '@/page/dashboard/test'
 import RegisterPage from './page/auth/register.tsx'
+import NotFound from './components/views/NotFound.tsx'
 
 
 const router = createBrowserRouter([
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: '/test',
     element: <EmailApp/>
+  },
+  {
+    path: '*',
+    element: <NotFound/>
   },
 ])
 

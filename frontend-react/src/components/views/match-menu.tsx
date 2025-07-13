@@ -38,7 +38,7 @@ const MatchMenu = () => {
   useEffect(()=>{
     async function getMatches (){
       const resp = await  API.get(
-        'match/summary/?status=pending'
+        'match/?lost_item=&status=pending&found_item='
       )
       setAllFoundItems(resp.data)
     }

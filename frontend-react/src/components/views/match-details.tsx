@@ -2,75 +2,150 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, CheckCircle, Clock, AlertTriangle, Columns2, List } from "lucide-react";
+import { CheckCircle, Clock, AlertTriangle, Columns2, List, User, Mail, Loader2, RefreshCw } from "lucide-react";
 import { API } from "@/lib/API";
 import VerificationQuestions from "../uix/verificationQuestions";
 import type { FoundItemMatch, Questionnaire } from "@/lib/ADT";
 import { QuestionAnswersDisplay } from "./verificationAnswers";
 
+interface LoadingStates {
+  [key: string]: boolean;
+}
+
+interface ErrorStates {
+  [key: string]: string | null;
+}
 
 export default function MatchDetails({ matchID }: { matchID: string }) {
   const navigateBackToMenu = () => {
     window.history.back();
   };
+  
   const [expandedItems, setExpandedItems] = useState<FoundItemMatch>();
   const [questionnaire, setQuestionnaire] = useState<Questionnaire | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [details, showDetails] = useState(false);
+  const [details, showDetails] = useState<{ [key: string]: boolean }>({});
+  const [loadingStates, setLoadingStates] = useState<LoadingStates>({});
+  const [errorStates, setErrorStates] = useState<ErrorStates>({});
 
-  async function handleMatchStatusUpdate(matchId: number, newStatus: string) {
+  const setButtonLoading = (buttonId: string, loading: boolean) => {
+    setLoadingStates(prev => ({ ...prev, [buttonId]: loading }));
+  };
+
+  const setButtonError = (buttonId: string, error: string | null) => {
+    setErrorStates(prev => ({ ...prev, [buttonId]: error }));
+  };
+
+  const clearButtonError = (buttonId: string) => {
+    setErrorStates(prev => ({ ...prev, [buttonId]: null }));
+  };
+
+  async function handleMatchStatusUpdate(matchId: number, newStatus: string, matchIndex: number) {
+    const buttonId = `approve-${matchIndex}`;
+    
     try {
-        const response = await API.patch(
-            `match/${matchId}/update-status/`,
-            { status: newStatus }
-        );
+      setButtonLoading(buttonId, true);
+      clearButtonError(buttonId);
 
-        console.log("Match status updated:", response.data);
+      const response = await API.patch(
+        `match/${matchId}/update-status/`,
+        { status: newStatus }
+      );
 
-        // Optional: show toast, alert, or refresh matches list
-        // Example: toast.success("Status updated and duplicates removed!");
-        // getMatches(); // if you have a function to reload match list
-
-    } catch (error) {
-        console.error("Error updating match status:", error);
-        // Optionally show a user-friendly error message
+      console.log("Match status updated:", response.data);
+      
+      // Refresh data after successful update
+      await fetchData();
+      
+      // Optional: You can add a success toast here
+      // toast.success("Status updated successfully!");
+      
+    } catch (error: any) {
+      console.error("Error updating match status:", error);
+      
+      // Set specific error message based on response
+      let errorMessage = "Failed to update match status";
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.status === 404) {
+        errorMessage = "Match not found";
+      } else if (error.response?.status === 403) {
+        errorMessage = "Not authorized to update this match";
+      } else if (error.response?.status >= 500) {
+        errorMessage = "Server error. Please try again later.";
+      }
+      
+      setButtonError(buttonId, errorMessage);
+      
+      // Clear error after 5 seconds
+      setTimeout(() => clearButtonError(buttonId), 5000);
+    } finally {
+      setButtonLoading(buttonId, false);
     }
-}
+  }
 
-
-  useEffect(() => {
   async function fetchData() {
     try {
       setLoading(true);
+      setError(null);
+      
       const response = await API.get(`match/for/${matchID}/`);
       const data: FoundItemMatch = response.data;
       setExpandedItems(data);
 
       console.log('match/for', data);
-      console.log('expandedItems (corrected)', data); // use data, not expandedItems
 
       const itemID = data.item?.id;
       if (itemID) {
-        console.log('query', `verify/questionnaire/?found_item=${itemID}`);
-        const questionnaireResponse = await API.get(
-          `verify/questionnaire/?found_item=${itemID}`
-        );
-        console.log('questionnaireResponse', questionnaireResponse.data);
-        const d : Questionnaire = questionnaireResponse.data[0]
-        setQuestionnaire(d);
+        try {
+          console.log('query', `verify/questionnaire/?found_item=${itemID}`);
+          const questionnaireResponse = await API.get(
+            `verify/questionnaire/?found_item=${itemID}`
+          );
+          console.log('questionnaireResponse', questionnaireResponse.data);
+          
+          if (questionnaireResponse.data && questionnaireResponse.data.length > 0) {
+            const d: Questionnaire = questionnaireResponse.data[0];
+            setQuestionnaire(d);
+          }
+        } catch (questionnaireError) {
+          console.error('Error fetching questionnaire:', questionnaireError);
+          // Don't fail the entire component if questionnaire fails
+        }
       }
-    } catch (err) {
-      setError("Failed to load match details");
+    } catch (err: any) {
       console.error('Error:', err);
+      
+      let errorMessage = "Failed to load match details";
+      if (err.response?.status === 404) {
+        errorMessage = "Match not found";
+      } else if (err.response?.status === 403) {
+        errorMessage = "Not authorized to view this match";
+      } else if (err.response?.status >= 500) {
+        errorMessage = "Server error. Please try again later.";
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   }
 
-  fetchData();
-}, [matchID]);
+  const toggleDetails = (matchIndex: number) => {
+    showDetails(prev => ({
+      ...prev,
+      [matchIndex]: !prev[matchIndex]
+    }));
+  };
 
+  const retryFetch = () => {
+    fetchData();
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [matchID]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -87,7 +162,10 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
       case "pending":
         return "bg-yellow-100 text-yellow-800";
       case "matched":
+      case "confirmed":
         return "bg-green-100 text-green-800";
+      case "rejected":
+        return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -98,6 +176,7 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
       case "pending":
         return <Clock className="h-4 w-4" />;
       case "matched":
+      case "confirmed":
         return <CheckCircle className="h-4 w-4" />;
       default:
         return <AlertTriangle className="h-4 w-4" />;
@@ -107,6 +186,49 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
   const calculatePercentage = (score: number) => {
     return Math.round(score * 100);
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="space-y-6 m-4">
+        <Button variant="ghost" className="mb-4" onClick={navigateBackToMenu}>
+          ← Back to Matches
+        </Button>
+        <Card className="bg-white shadow-sm border border-slate-200">
+          <CardContent className="p-12 text-center">
+            <Loader2 className="h-12 w-12 text-slate-400 mx-auto mb-4 animate-spin" />
+            <h3 className="text-lg font-medium text-slate-800 mb-2">
+              Loading match details...
+            </h3>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="space-y-6 m-4">
+        <Button variant="ghost" className="mb-4" onClick={navigateBackToMenu}>
+          ← Back to Matches
+        </Button>
+        <Card className="bg-white shadow-sm border border-slate-200">
+          <CardContent className="p-12 text-center">
+            <AlertTriangle className="h-12 w-12 text-red-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-slate-800 mb-2">
+              Error Loading Match
+            </h3>
+            <p className="text-slate-600 mb-4">{error}</p>
+            <Button onClick={retryFetch} variant="outline">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Retry
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 m-4">
@@ -174,6 +296,10 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
                     {expandedItems.potential_matches.map((match, index) => {
                       const lostItem = match.lost_item;
                       const matchPercentage = calculatePercentage(match.score);
+                      const user = lostItem.user;
+                      const isDetailsExpanded = details[index] || false;
+                      const approveButtonId = `approve-${index}`;
+                      const detailsButtonId = `details-${index}`;
                       
                       return (
                         <Card key={`${lostItem.serial_id}-${index}`} className="border border-slate-200">
@@ -194,6 +320,24 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
                           </CardHeader>
                           
                           <CardContent className="space-y-4">
+                            {/* User Information */}
+                            <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                              <div className="flex items-center space-x-2 mb-2">
+                                <User className="h-4 w-4 text-slate-600" />
+                                <span className="font-medium text-slate-800">Claimant Information</span>
+                              </div>
+                              <div className="space-y-1 text-sm">
+                                <div className="flex items-center space-x-2">
+                                  <span className="font-medium text-slate-600">Name:</span>
+                                  <span className="text-slate-800">{user.first_name} {user.last_name}</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Mail className="h-3 w-3 text-slate-600" />
+                                  <span className="text-slate-600">{user.email}</span>
+                                </div>
+                              </div>
+                            </div>
+
                             <div className="grid grid-cols-2 gap-4 text-sm">
                               <div>
                                 <p className="font-medium text-muted-foreground">Match Score</p>
@@ -217,31 +361,59 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
                                 <p>{lostItem.serial_id}</p>
                               </div>
                             </div>
-                            {details && (
+                            
+                            {isDetailsExpanded && (
                               <div>
-                                <QuestionAnswersDisplay lostItemID = {match.lost_item.item.id}/>
+                                <QuestionAnswersDisplay lostItemID={match.lost_item.item.id} />
                               </div>
                             )}
+                            
                             <CardDescription className="text-sm">
                               {lostItem.item.description}
                             </CardDescription>
                             
-                            <div className="pt-2 flex flex-col gap-4">
+                            <div className="pt-2 flex flex-col gap-2">
                               <Button 
-                                onClick={()=>{
-                                  showDetails(!details)
-                                }}
+                                onClick={() => toggleDetails(index)}
                                 className="w-full"
-                                variant='secondary'
+                                variant="secondary"
+                                disabled={loadingStates[detailsButtonId]}
                               >
-                                {!details? ('View Details'):('hide details')}
+                                {loadingStates[detailsButtonId] ? (
+                                  <>
+                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                    Loading...
+                                  </>
+                                ) : (
+                                  !isDetailsExpanded ? 'View Details' : 'Hide Details'
+                                )}
                               </Button>
+                              
                               <Button 
-                                onClick={() => handleMatchStatusUpdate(expandedItems.found_item_matches[index], "confirmed")}
-                                className="w-full bg-green-400"
+                                onClick={() => handleMatchStatusUpdate(expandedItems.found_item_matches[index], "confirmed", index)}
+                                className="w-full bg-green-600 hover:bg-green-700"
+                                disabled={loadingStates[approveButtonId] || match.status === "confirmed"}
                               >
-                                Approve Match
+                                {loadingStates[approveButtonId] ? (
+                                  <>
+                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                    Approving...
+                                  </>
+                                ) : match.status === "confirmed" ? (
+                                  <>
+                                    <CheckCircle className="h-4 w-4 mr-2" />
+                                    Already Approved
+                                  </>
+                                ) : (
+                                  'Approve Match'
+                                )}
                               </Button>
+                              
+                              {errorStates[approveButtonId] && (
+                                <div className="text-red-600 text-sm bg-red-50 p-2 rounded border border-red-200">
+                                  {errorStates[approveButtonId]}
+                                </div>
+                              )}
                             </div>
                           </CardContent>
                         </Card>
@@ -252,27 +424,16 @@ export default function MatchDetails({ matchID }: { matchID: string }) {
               </Card>
             </div>
           </div>
-        ) : (
-          <Card className="bg-white shadow-sm border border-slate-200">
-            <CardContent className="p-12 text-center">
-              <Bell className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-slate-800 mb-2">
-                Loading match details...
-              </h3>
-            </CardContent>
-          </Card>
-        )}
+        ) : null}
       </div>
-      { questionnaire?.questions && 
-        (
-          expandedItems &&
-          <VerificationQuestions 
-            itemName={expandedItems.item.name}
-            found_item_id ={expandedItems.item.id}
-            questionnaire_id ={questionnaire.id}
-          />
-        )
-      }
+      
+      {questionnaire?.questions && expandedItems && (
+        <VerificationQuestions 
+          itemName={expandedItems.item.name}
+          found_item_id={expandedItems.item.id}
+          questionnaire_id={questionnaire.id}
+        />
+      )}
     </div>
   );
 }

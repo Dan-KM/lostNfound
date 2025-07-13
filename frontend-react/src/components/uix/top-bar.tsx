@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 
 // import { NavUser } from './nav-user'; 
 import { useAuth } from '@/hooks/useAuthProvider';
+import { NavUser } from './nav-user';
 
 
 export const TopBar = () => {
@@ -43,11 +44,11 @@ export const TopBar = () => {
             3
           </Badge>
               </Button>
-              {/* <NavUser user={{
+              <NavUser user={{
                   name: currentUser?.first_name ?? "",
                   email: currentUser?.email?? "",
                   avatar: ''
-                }} /> */}
+                }} />
             </div>
           </div>
         </header>

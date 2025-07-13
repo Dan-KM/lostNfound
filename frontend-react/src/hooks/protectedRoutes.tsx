@@ -1,6 +1,7 @@
 import { useEffect, type PropsWithChildren } from "react"
 import { useAuth } from "./useAuthProvider"
 import PermissionDenied from "@/components/uix/permission-denied"
+import { useNavigate } from "react-router-dom"
 
 type ProtectedRoutesProps = PropsWithChildren & {
     allowedRoles?: string [],
@@ -8,7 +9,7 @@ type ProtectedRoutesProps = PropsWithChildren & {
 
 export default function ProtectedRoutes ({children, allowedRoles} : ProtectedRoutesProps ){
     const { currentUser, getUser } = useAuth()
-
+    const navigate = useNavigate()
     useEffect(()=>{
         async function s(){
             await getUser()
@@ -22,6 +23,7 @@ export default function ProtectedRoutes ({children, allowedRoles} : ProtectedRou
         }
         
         if(currentUser === null){
+            navigate('/auth/login')
             return <PermissionDenied/>
         }
 

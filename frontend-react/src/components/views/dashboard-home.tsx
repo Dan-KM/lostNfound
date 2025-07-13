@@ -11,7 +11,6 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-import ProtectedRoutes from "@/hooks/protectedRoutes";
 import { useAuth } from "@/hooks/useAuthProvider";
 import { API } from "@/lib/API";
 
@@ -116,88 +115,86 @@ export const Dashboard = () => {
   };
 
   return (
-    <ProtectedRoutes allowedRoles={["admin", "manager", "claimant", "finder"]}>
-      <div className="space-y-6 m-4">
-        <div>
-          <h2 className="text-3xl font-bold text-slate-800 mb-2">Welcome back!</h2>
-          <p className="text-slate-600">
-            {currentUserRole === "claimant" &&
-              "Track your lost items and view potential matches."}
-            {currentUserRole === "finder" &&
-              "Manage your found item reports and help reunite items."}
-            {currentUserRole === "manager" &&
-              "Oversee the lost and found system operations."}
-          </p>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {getStats().map((stat, index) => (
-            <Card key={index} className="bg-white shadow-sm border border-slate-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-slate-600">
-                      {stat.title}
-                    </p>
-                    <p className="text-3xl font-bold text-slate-900">
-                      {stat.value}
-                    </p>
-                  </div>
-                  <stat.icon className={`h-8 w-8 ${stat.color}`} />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Items Table */}
-        <Card className="bg-white shadow-sm border border-slate-200">
-          <CardHeader>
-            <CardTitle className="text-slate-800">
-              {currentUserRole === "finder" ? "Found Items" : "Lost Items"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {userItems.length === 0 ? (
-              <p className="text-slate-500 text-sm">No items found.</p>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full table-auto text-sm text-left">
-                  <thead className="text-xs uppercase text-slate-500 border-b">
-                    <tr>
-                      <th className="px-4 py-2">Serial ID</th>
-                      <th className="px-4 py-2">Name</th>
-                      <th className="px-4 py-2">Description</th>
-                      <th className="px-4 py-2">Category</th>
-                      <th className="px-4 py-2">Subcategory</th>
-                      <th className="px-4 py-2">Location</th>
-                      <th className="px-4 py-2">Status</th>
-                      <th className="px-4 py-2">Reported</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {userItems.map((item) => (
-                      <tr key={item.id} className="border-b hover:bg-slate-50">
-                        <td className="px-4 py-2 font-mono">{item.serial_id}</td>
-                        <td className="px-4 py-2">{item.item.name}</td>
-                        <td className="px-4 py-2">{item.item.description}</td>
-                        <td className="px-4 py-2">{item.item.category.name}</td>
-                        <td className="px-4 py-2">{item.item.subcategory.name}</td>
-                        <td className="px-4 py-2">{item.item.location}</td>
-                        <td className="px-4 py-2">{item.status || "Pending"}</td>
-                        <td className="px-4 py-2">
-                          {new Date(item.reported_date).toLocaleDateString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+    <div className="space-y-6 m-4">
+      <div>
+        <h2 className="text-3xl font-bold text-slate-800 mb-2">Welcome back!</h2>
+        <p className="text-slate-600">
+          {currentUserRole === "claimant" &&
+            "Track your lost items and view potential matches."}
+          {currentUserRole === "finder" &&
+            "Manage your found item reports and help reunite items."}
+          {currentUserRole === "manager" &&
+            "Oversee the lost and found system operations."}
+        </p>
       </div>
-    </ProtectedRoutes>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {getStats().map((stat, index) => (
+          <Card key={index} className="bg-white shadow-sm border border-slate-200">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-slate-600">
+                    {stat.title}
+                  </p>
+                  <p className="text-3xl font-bold text-slate-900">
+                    {stat.value}
+                  </p>
+                </div>
+                <stat.icon className={`h-8 w-8 ${stat.color}`} />
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Items Table */}
+      <Card className="bg-white shadow-sm border border-slate-200">
+        <CardHeader>
+          <CardTitle className="text-slate-800">
+            {currentUserRole === "finder" ? "Found Items" : "Lost Items"}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {userItems.length === 0 ? (
+            <p className="text-slate-500 text-sm">No items found.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full table-auto text-sm text-left">
+                <thead className="text-xs uppercase text-slate-500 border-b">
+                  <tr>
+                    <th className="px-4 py-2">Serial ID</th>
+                    <th className="px-4 py-2">Name</th>
+                    <th className="px-4 py-2">Description</th>
+                    <th className="px-4 py-2">Category</th>
+                    <th className="px-4 py-2">Subcategory</th>
+                    <th className="px-4 py-2">Location</th>
+                    <th className="px-4 py-2">Status</th>
+                    <th className="px-4 py-2">Reported</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userItems.map((item) => (
+                    <tr key={item.id} className="border-b hover:bg-slate-50">
+                      <td className="px-4 py-2 font-mono">{item.serial_id}</td>
+                      <td className="px-4 py-2">{item.item.name}</td>
+                      <td className="px-4 py-2">{item.item.description}</td>
+                      <td className="px-4 py-2">{item.item.category.name}</td>
+                      <td className="px-4 py-2">{item.item.subcategory.name}</td>
+                      <td className="px-4 py-2">{item.item.location}</td>
+                      <td className="px-4 py-2">{item.status || "Pending"}</td>
+                      <td className="px-4 py-2">
+                        {new Date(item.reported_date).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };

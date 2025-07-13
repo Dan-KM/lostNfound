@@ -44,12 +44,14 @@ export default function AuthProvider ({ children }: AuthProviderProps ) {
             localStorage.setItem('access_token', token)
             localStorage.setItem('refresh_token', refresh)
 
-            await getUser()
         }catch(error){
+            
             setAuthToken(null)
             setRefreshToken(null)
             localStorage.removeItem('access_token')
             localStorage.removeItem('refresh_token')
+
+            throw error
         }
     }
 

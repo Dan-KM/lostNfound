@@ -9,6 +9,7 @@ import { SubmitItem as SubmitLostItem } from "@/components/views/item-submission
 import Notifications from "@/components/views/Notifications"
 import NotFound from "@/components/views/NotFound"
 import DashboardLayout from "@/components/uix/dashboard-layout"
+import ProtectedRoutes from "@/hooks/protectedRoutes"
 
 function page() {
   const [activeView, setActiveView] = useState("dashboard")
@@ -39,19 +40,19 @@ function page() {
   const renderView = () => {
     switch (activeView) {
       case "home":
-        return <Dashboard />
+        return <ProtectedRoutes allowedRoles={['__all__']}><Dashboard /></ProtectedRoutes>
       case "matches":
-        return <Matches />
+        return <ProtectedRoutes allowedRoles={['manager']}><Matches /></ProtectedRoutes>
       case "verification":
-        return <Verification />
+      return <ProtectedRoutes allowedRoles={['claimant']}><Verification /></ProtectedRoutes>
       case "manager":
-        return <ManagerTools />
+        return <ProtectedRoutes allowedRoles={['manager']}><ManagerTools /></ProtectedRoutes>
       case "submit-lost":
-        return <SubmitLostItem />
+        return <ProtectedRoutes allowedRoles={['claimant', 'finder']}><SubmitLostItem /></ProtectedRoutes>
       case "submit-found":
-        return <SubmitLostItem />
+        return <ProtectedRoutes allowedRoles={['claimant', 'finder']}><SubmitLostItem /></ProtectedRoutes>
       case "notifications":
-        return <Notifications />
+        return <ProtectedRoutes allowedRoles={['__all__']}><Notifications /></ProtectedRoutes>
       default:
         return <NotFound />
     }

@@ -21,6 +21,11 @@ from rest_framework.response import Response
 from inventory.models import UserItem
 
 from .util.ItemMatcher import ItemMatcher, initialize_database
+
+from notification.models import Notification
+
+from rest_framework import status
+from django.db import transaction
 # Create your views here.
 
 
@@ -81,6 +86,53 @@ class LostFoundMatchView(viewsets.ModelViewSet):
             "status": match.status,
             "other_matches_deleted": deleted_count
         }, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['patch'], url_path='resolve-match')
+    def resolve_match(self, request, pk=None):
+        found_id = request.data.get("found_id")
+        lost_id = request.data.get("lost_id")
+
+        if not found_id or not lost_id:
+            return Response({"detail": "Both found_id and lost_id are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            with transaction.atomic():
+                # Update both user item statuses
+                from inventory.models import UserItem  # adjust import if needed
+
+                found_item = UserItem.objects.select_for_update().get(pk=found_id)
+                lost_item = UserItem.objects.select_for_update().get(pk=lost_id)
+
+                found_item.status = "returned"
+                lost_item.status = "returned"
+
+                found_item.save()
+                lost_item.save()
+
+                # Update match status
+                match = self.get_object()
+                match.status = "resolved"
+                match.save()
+
+                # Notification.objects.create(
+                #     recipient=lost_item.user,
+                #     title="Possible Match Found",
+                #     message=f"We've found a possible match for your lost item: {found_item.item.name}",
+                # )
+
+
+                return Response({
+                    "detail": "Match resolved and items marked as returned.",
+                    "match_id": match.id,
+                    "found_id": found_id,
+                    "lost_id": lost_id
+                }, status=status.HTTP_200_OK)
+
+        except UserItem.DoesNotExist:
+            return Response({"detail": "One or both user items not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 
@@ -102,4 +154,3 @@ class FoundItemMatchViewSet(viewsets.ReadOnlyModelViewSet):
 
         serializer = self.get_serializer(found_item)
         return Response(serializer.data)
-    

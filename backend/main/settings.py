@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'inventory',
     'match',
     'verification',
-    
+    'notification',
 ]
 
 MIDDLEWARE = [

@@ -62,31 +62,19 @@ export const MatchList = ({ matches, refreshData }: { matches: Match[], refreshD
   );
 });
 
-async function handleReceiveItem(found_id: number, lost_id: number, matchId : number) {
-        try {
-            await API.patch(
-                `inventory/user-item/${found_id}/update-status/`,
-                { status: 'returned' }
-            );
-            await API.patch(
-                `inventory/user-item/${lost_id}/update-status/`,
-                { status: 'returned' }
-            );
-            await API.patch(
-                `inventory/user-item/${lost_id}/update-status/`,
-                { status: 'returned' }
-            );
-            await API.patch(
-              `match/${matchId}/update-status/`,
-              { status: 'resolved' }
-            );
+async function handleItemHandover(found_id: number, lost_id: number, matchId: number) {
+    try {
+        await API.patch(`match/${matchId}/resolve-match/`, {
+            found_id,
+            lost_id,
+        });
 
-            refreshData()
-
-        } catch (error) {
-            console.error("Error updating status:", error);
-        }
+        refreshData();
+    } catch (error) {
+        console.error("Error resolving match:", error);
     }
+}
+
 
 
 const getStatusVariant = (status: string | undefined): "default" | "secondary" | "destructive" | "success" | "outline" => {
@@ -185,7 +173,7 @@ const getStatusVariant = (status: string | undefined): "default" | "secondary" |
                 </TableCell>
                 <TableCell className="text-right">
                   <Button
-                    onClick={() => {handleReceiveItem(match.found_item.id, match.lost_item.id, match.id)}}
+                    onClick={() => {handleItemHandover(match.found_item.id, match.lost_item.id, match.id)}}
                   >
                     Handover
                   </Button>

@@ -47,37 +47,12 @@ class CategoryWithSubCategoryView(viewsets.ReadOnlyModelViewSet):
     # permission_classes = [IsAuthenticated]
     
 
-# class ItemView(viewsets.ModelViewSet):
-#     queryset = Item.objects.all()
-#     serializer_class = ItemSerializer
-#     lookup_field='pk'
-
-# class ItemView(viewsets.ModelViewSet):
-#     queryset = Item.objects.all()
-#     serializer_class = ItemSerializer
-#     lookup_field = 'pk'
-    # permission_classes = [IsAuthenticated]
-
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         if serializer.is_valid():
-#             with transaction.atomic():
-#                 item = serializer.save()
-#                 user_item = UserItem.objects.create(
-#                     item=item,
-#                     user=request.user,  # now safe to use
-#                     reported_date=serializer.validated_data.get('reported_date'),
-#                     status='submitted',
-#                 )
-#                 user_item_serializer = UserItemSerializer(user_item)
-#             return Response(user_item_serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ItemView(viewsets.ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     lookup_field = 'pk'
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         print("📥 Received POST request to create item")

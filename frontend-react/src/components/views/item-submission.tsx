@@ -1,11 +1,11 @@
-'use client';
+
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Upload, ChevronDownIcon, MapPin, Package, CircleGauge } from "lucide-react";
+import { Upload, ChevronDownIcon, MapPin, Package, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { CategorySelect } from '@/components/uix/categorySelect'
 import {
@@ -19,6 +19,7 @@ import ProtectedRoutes from "@/hooks/protectedRoutes";
 import { API } from "@/lib/API";
 import { PopupWindow } from "../uix/popup-window";
 import type { AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const SubmitItem = () => {
   const [formData, setFormData] = useState({
@@ -34,8 +35,10 @@ export const SubmitItem = () => {
   const [open, setOpen] = useState(false)
   const [reported_date, setReported_date] = useState<Date | undefined>(undefined)
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const {currentUser} = useAuth()
+  const router = useNavigate();
     
   const [currentUserRole, setCurrentUserRole] = useState<string | null>()
 
@@ -49,22 +52,82 @@ export const SubmitItem = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Clear previous errors
+    setError(null);
+    
     if (formData.reported_date && formData.category && formData.subcategory && formData.name && formData.description && formData.location) {
-
+      setIsSubmitting(true);
+      
       formData.item_type = (currentUserRole == 'claimant'? 'lost' : 'found')
       console.log('formdata ==> ', formData);
+      
       try {
         const response = await API.post(
           'inventory/items/',
           JSON.stringify(formData)
         )
         setApiResponse(response)
+        
+        // Show success toast
+        toast.success(
+          `${currentUserRole === 'claimant' ? 'Lost' : 'Found'} item reported successfully!`,
+          {
+            description: `Item ID: ${response.data.serial_id}`,
+            action: {
+              label: "View Dashboard",
+              onClick: () => router('/dashboard#home'),
+            },
+          }
+        );
+        
+        // Redirect to dashboard after a short delay
+        // setTimeout(() => {
+        //   router('/dashboard#home');
+        // }, 2000);
 
-      } catch (error) {
-        console.error(error)
+      } catch (error: any) {
+        console.error('Submission error:', error);
+        
+        // Handle different error types
+        if (error.response?.status === 400) {
+          if (error.response?.data?.detail?.includes('duplicate') || 
+              error.response?.data?.message?.includes('already exists') ||
+              error.response?.data?.error?.includes('duplicate')) {
+            setError("This item has already been reported. Please check if you've already submitted this item or try with different details.");
+            toast.error("Duplicate submission detected", {
+              description: "This item appears to have already been reported.",
+            });
+          } else {
+            setError("Invalid submission. Please check your input and try again.");
+            toast.error("Submission failed", {
+              description: "Please verify all fields are correctly filled.",
+            });
+          }
+        } else if (error.response?.status === 401) {
+          setError("Authentication required. Please log in again.");
+          toast.error("Authentication error", {
+            description: "Please log in and try again.",
+          });
+        } else if (error.response?.status === 403) {
+          setError("You don't have permission to perform this action.");
+          toast.error("Permission denied", {
+            description: "Contact an administrator if you believe this is an error.",
+          });
+        } else if (error.response?.status >= 500) {
+          setError("Server error. Please try again later.");
+          toast.error("Server error", {
+            description: "Our servers are experiencing issues. Please try again later.",
+          });
+        } else {
+          setError("An unexpected error occurred. Please try again.");
+          toast.error("Submission failed", {
+            description: "An unexpected error occurred. Please try again.",
+          });
+        }
+      } finally {
+        setIsSubmitting(false);
       }
-    }
-    else{
+    } else {
       toast.error("Please fill all required fields and select a date.");
       setError("Please fill all required fields");
       return;
@@ -80,16 +143,38 @@ export const SubmitItem = () => {
     }
   };
 
+  const handleClosePopup = () => {
+    setApiResponse(null);
+  };
+
   return (
     <ProtectedRoutes allowedRoles={['admin','claimant', 'finder']}>
       {apiResponse && (
         <>
-          <PopupWindow handleCloseWindow={() => {
-            setApiResponse(null)
-          }}>
-            <h2>
-              {apiResponse.data.serial_id}
-            </h2>
+          <PopupWindow handleCloseWindow={handleClosePopup}>
+            <div className="text-center p-6">
+              <div className="text-green-600 mb-4">
+                <Package className="mx-auto h-12 w-12" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                Item Reported Successfully!
+              </h2>
+              <p className="text-gray-600 mb-4">
+                Your item has been registered with ID:
+              </p>
+              <p className="text-xl font-mono bg-gray-100 p-3 rounded-lg mb-4">
+                {apiResponse.data.serial_id}
+              </p>
+              <p className="text-sm text-gray-500 mb-4">
+                You will be redirected to the dashboard shortly.
+              </p>
+              <Button 
+                onClick={handleClosePopup}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                Close
+              </Button>
+            </div>
           </PopupWindow>
         </>
       )}
@@ -120,6 +205,12 @@ export const SubmitItem = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                  <div className="flex items-center gap-2 p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+                      <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                      <span>{error}</span>
+                  </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div className="space-y-2">
                   <Label htmlFor="name">Item Name <span className="text-red-500">*</span></Label>
@@ -128,6 +219,7 @@ export const SubmitItem = () => {
                     placeholder="e.g., iPhone 13 Pro"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -151,6 +243,7 @@ export const SubmitItem = () => {
                   rows={4}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -165,6 +258,7 @@ export const SubmitItem = () => {
                     placeholder="e.g., Main Library, 2nd floor"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -179,6 +273,7 @@ export const SubmitItem = () => {
                           variant="outline"
                           id="date"
                           className="w-48 justify-between font-normal"
+                          disabled={isSubmitting}
                         >
                           {reported_date ? reported_date.toLocaleDateString() : "Select date"}
                           <ChevronDownIcon />
@@ -220,6 +315,7 @@ export const SubmitItem = () => {
                       accept="image/*"
                       className="hidden"
                       onChange={handlePhotoUpload}
+                      disabled={isSubmitting}
                     />
                   </div>
                   <p className="text-xs text-slate-500 mt-2">PNG, JPG up to 10MB</p>
@@ -230,33 +326,24 @@ export const SubmitItem = () => {
                   )}
                 </div>
               </div>
-
-              {error && (
-                <p className="text-red-500 text-sm mt-2">
-                  {error}
-                </p>
-              )}
-
               {currentUserRole == 'claimant'? (
               <>
-                <Button type="submit" className="w-full bg-orange-600 hover:bg-orange-700"
-                  onClick={() => {
-                  toast("Event has been created", {
-                    description: "Sunday, December 03, 2023 at 9:00 AM",
-                    action: {
-                      label: "Undo",
-                      onClick: () => console.log("Undo"),
-                    },
-                  });
-                }}
-              >
-                Submit Lost Item Report
-              </Button>
+                <Button 
+                  type="submit" 
+                  className="w-full bg-orange-600 hover:bg-orange-700"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Lost Item Report'}
+                </Button>
               </>
             ): (
             <>
-              <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
-                Submit Found Item Report
+              <Button 
+                type="submit" 
+                className="w-full bg-green-600 hover:bg-green-700"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit Found Item Report'}
               </Button>
             </>
           )} 
