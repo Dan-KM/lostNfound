@@ -10,6 +10,7 @@ import Notifications from "@/components/views/Notifications"
 import NotFound from "@/components/views/NotFound"
 import DashboardLayout from "@/components/uix/dashboard-layout"
 import ProtectedRoutes from "@/hooks/protectedRoutes"
+import ItemReportView from "./dashboard/test"
 
 function page() {
   const [activeView, setActiveView] = useState("dashboard")
@@ -19,7 +20,7 @@ function page() {
       const checkHash = () => {
         const hash = window.location.hash.substring(1);
 
-        const [path, query] = hash.split('?');
+        const [path, ] = hash.split('?');
   
         const segments = path.split('/');
         
@@ -53,6 +54,8 @@ function page() {
         return <ProtectedRoutes allowedRoles={['claimant', 'finder']}><SubmitLostItem /></ProtectedRoutes>
       case "notifications":
         return <ProtectedRoutes allowedRoles={['__all__']}><Notifications /></ProtectedRoutes>
+      case "report":
+        return <ProtectedRoutes allowedRoles={['manager']}><ItemReportView /></ProtectedRoutes>
       default:
         return <NotFound />
     }
@@ -68,6 +71,5 @@ function page() {
     
   )
 }
-
 
 export default page

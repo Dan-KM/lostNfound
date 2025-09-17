@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Badge } from "@/components/ui/badge";
 import {
   Bell, 
-  User,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '@/components/ui/sidebar';
@@ -11,11 +10,25 @@ import { Separator } from '@/components/ui/separator';
 // import { NavUser } from './nav-user'; 
 import { useAuth } from '@/hooks/useAuthProvider';
 import { NavUser } from './nav-user';
-
+import { API } from '@/lib/API';
 
 export const TopBar = () => {
-  const [activeSection, setActiveSection] = useState("dashboard");
   const { currentUser } = useAuth()
+  const [notif, setNotif] = useState<number>()
+
+  const notificationNumber = async ()=>{
+    try {
+      const r = await API.get('notifications/&is_read=false')
+      setNotif(r.data.length)
+    } catch (fist) {
+      
+    }
+  }
+
+  useEffect(()=>{
+    notificationNumber()
+  },[])
+
   return (
     <>
         <header className="bg-white border-b border-slate-200 px-6">
@@ -33,17 +46,19 @@ export const TopBar = () => {
             </div>
             
             <div className="flex items-center space-x-2">
-              <Button 
-          variant="ghost" 
-          size="sm" 
-          className="relative"
-          onClick={() => setActiveSection("notifications")}
-              >
-          <Bell className="h-5 w-5" />
-          <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-red-500">
-            3
-          </Badge>
-              </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="relative"
+              onClick={() => { window.location.href = "/dashboard#notifications";}}
+            >
+              <Bell className="h-5 w-5" />
+              {notif && notif > 0 && (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-red-500">
+                  {notif}
+                </Badge>
+              )}
+            </Button>
               <NavUser user={{
                   name: currentUser?.first_name ?? "",
                   email: currentUser?.email?? "",

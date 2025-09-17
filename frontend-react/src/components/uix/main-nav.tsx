@@ -63,6 +63,12 @@ const data = {
       allowedRoles: ["admin","finder"],
     },
     {
+      id: "report",
+      title: "Report",
+      icon: GalleryVerticalEnd,
+      allowedRoles: ["admin","manager"],
+    },
+    {
       id: "notifications",
       title: "Notifications",
       icon: BellDot,

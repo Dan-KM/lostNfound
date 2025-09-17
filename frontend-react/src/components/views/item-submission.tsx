@@ -81,9 +81,9 @@ export const SubmitItem = () => {
         );
         
         // Redirect to dashboard after a short delay
-        // setTimeout(() => {
-        //   router('/dashboard#home');
-        // }, 2000);
+        setTimeout(() => {
+          window.location.href = "/dashboard#notifications";
+        }, 2000);
 
       } catch (error: any) {
         console.error('Submission error:', error);

@@ -31,7 +31,7 @@ class ItemSerializerWithCategory(serializers.ModelSerializer):
     subcategory = SubCategorySerializer()
     class Meta:
         model = Item
-        fields = ['id', 'name', 'description', 'category', 'subcategory', 'location']
+        fields = ['id', 'name', 'description', 'category', 'subcategory', 'location', 'item_type']
 
 class UserItemSerializer(serializers.ModelSerializer):
     item = ItemSerializerWithCategory(read_only = True)
@@ -39,3 +39,7 @@ class UserItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserItem
         fields = ['id', 'user', 'serial_id','status', 'reported_date', 'item', 'updated_at']
+
+class ItemReportSerializer(serializers.Serializer):
+    category = serializers.CharField()
+    subcategories = serializers.DictField(child=serializers.IntegerField())

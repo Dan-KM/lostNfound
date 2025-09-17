@@ -9,6 +9,7 @@ import {
 
 import { ItemReception } from "./itemReceprion";
 import ItemHandover from "./itemHandover";
+import ItemInCustody from "../uix/items-incustody";
 
 const ManagerTools = () => {
   
@@ -24,10 +25,9 @@ const ManagerTools = () => {
       </div>
 
       <Tabs defaultValue="reception" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="reception">Item Reception</TabsTrigger>
           <TabsTrigger value="handover">Handover Management</TabsTrigger>
-          <TabsTrigger value="custody">Items in Custody</TabsTrigger>
         </TabsList>
 
         {/* item reception */}
@@ -47,12 +47,6 @@ const ManagerTools = () => {
 
         {/* Handover Management*/}
         <TabsContent value="handover" className="space-y-6">
-          <div className="space-y-4">
-          </div>
-        </TabsContent>
-        
-        {/* Items In Custody*/}
-        <TabsContent value="custody" className="space-y-6">
           <ItemHandover/>
         </TabsContent>
       </Tabs>

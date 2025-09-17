@@ -1,70 +1,94 @@
-import { API } from '@/lib/API';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { API } from "@/lib/API";
 
 interface NotificationData {
+  id : number;
   title: string;
   message: string;
+  is_read: boolean;
 }
 
-interface NotificationProps {
-  notification: NotificationData;
-}
+const NotificationPage = () => {
+  const [notifications, setNotifications] = useState<NotificationData[]>([]);
+  const [filter, setFilter] = useState<"all" | "read" | "unread">("all");
+  const [loading, setLoading] = useState(true);
 
-const Notification: React.FC<NotificationProps> = ({ notification }) => {
-  const [expanded, setExpanded] = useState<boolean>(false);
-  
-  const toggleExpand = (): void => {
-    setExpanded(!expanded);
+  const fetchNotifications = async () => {
+    setLoading(true);
+    try {
+        const response = await API.get("notifications/");
+        setNotifications(response.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return (
-    <div 
-      className={`border border-gray-200 rounded-md p-3 my-2 cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors ${
-        expanded ? 'shadow-sm' : ''
-      }`}
-      onClick={toggleExpand}
-    >
-      <h3 className="font-medium text-lg mb-1">{notification.title}</h3>
-      <p className="text-gray-700">
-        {expanded 
-          ? notification.message 
-          : `${notification.message.substring(0, 50)}${notification.message.length > 50 ? '...' : ''}`
-        }
-      </p>
-      {notification.message.length > 50 && (
-        <div className="text-sm text-gray-500 mt-1">
-          {expanded ? 'Click to collapse' : 'Click to expand'}
-        </div>
-      )}
-    </div>
-  );
-};
 
-
-const NotificationsList = () => {
-  const [notifications, setNotifications] = useState<NotificationData[]>()
-  async function fetchData(){
-    try {
-      const r = await API.get('notifications/')
-      const t : NotificationData[] = r.data
-      setNotifications(t)
-    } catch (first) {
-      console.error(first)
+  const markAsRead = async (id: number, index: number) => {
+  try {
+    if (API) {
+      await API.post(`notifications/${id}/mark-read/`);
     }
+    setNotifications((prev) =>
+      prev.map((n, i) => (i === index ? { ...n, is_read: true } : n))
+    );
+  } catch (err) {
+    console.error("Failed to mark notification as read:", err);
   }
+};
 
-  useEffect(()=>{fetchData()}, [])
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);  
+
+  const filtered = notifications.filter((n) =>
+    filter === "read" ? n.is_read : filter === "unread" ? !n.is_read : true
+  );
 
   return (
-    <div className="max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Notifications</h2>
-      {notifications && notifications.map((notification, index) => (
-        <Notification key={index} notification={notification} />
-      ))}
+    <div className="max-w-xl mx-auto space-y-6">
+      <h2 className="text-2xl font-bold">Notifications</h2>
+
+      <Tabs value={filter} onValueChange={(val) => setFilter(val as typeof filter)}>
+        <TabsList className="grid grid-cols-3 w-full">
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="unread">Unread</TabsTrigger>
+          <TabsTrigger value="read">Read</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value={filter}>
+          {loading ? (
+            <p className="text-center py-10">Loading...</p>
+          ) : filtered.length === 0 ? (
+            <p className="text-center py-10">No {filter} notifications</p>
+          ) : (
+            filtered.map((n, i) => (
+              <Card
+                key={i}
+                className={`mb-4 ${!n.is_read ? "bg-blue-50" : "bg-white"}`}
+              >
+                <CardContent className="p-4 space-y-2">
+                  <h3 className="font-semibold">{n.title}</h3>
+                  <p className="text-sm text-gray-700">{n.message}</p>
+                  {!n.is_read && (
+                    <Button size="sm" onClick={() => markAsRead(n.id, i)}>
+                      Mark as Read
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
 
-export default NotificationsList;
-export { Notification };
-export type { NotificationData, NotificationProps };
+export default NotificationPage;

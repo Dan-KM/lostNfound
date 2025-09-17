@@ -5,12 +5,15 @@ from ..models import LostFoundMatch
 ItemMatcher = VectorDB()
 
 def save_matches(userItem: UserItem, is_lost : bool = False, threshold: float = 0.85):
+    
+    if userItem.status not in ["submitted", "in office"]:
+        return
+    
     is_lost = userItem.serial_id.startswith("LST")
     
     matches = ItemMatcher.find_matches_with_serial_id(
         query_item_id=userItem.serial_id,
-        is_lost=is_lost,
-        threshold=threshold
+        is_lost=is_lost
     )
 
     if not matches:
@@ -68,7 +71,7 @@ def embed_user_item(userItem: UserItem):
 
 #     print("Initialization complete.")
 
-def initialize_database(threshold: float = 0.5):
+def initialize_database(threshold: float = 0.5, **kwargs):
     print("Initializing database with match records...")
 
     # Optionally clear old matches if you want to start fresh

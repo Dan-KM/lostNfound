@@ -9,7 +9,6 @@ from .serializers import (
     LostFoundMatchSerializer, 
     FoundItemMatchSerializer, 
     LostItemMatchSummarySerializer,
-    FoundItemWithMatchesOptimizedSerializer
     )
 
 from .models import LostFoundMatch
@@ -46,19 +45,32 @@ class LostFoundMatchView(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], url_path='run-match')
     def run_match(self, request):
+        print("🔧 [run_match] Request received")
+
         if request.user.user_role != 'manager':
+            print(f"⛔ [run_match] Unauthorized access by user: {request.user.username}")
             return Response({"detail": "Unauthorized"}, status=status.HTTP_403_FORBIDDEN)
 
         threshold = request.data.get('threshold')
+        print(f"📊 [run_match] Received threshold: {threshold}")
+
         if threshold is None:
+            print("⚠️ [run_match] Threshold is missing in request data")
             return Response({"detail": "Threshold is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             ItemMatcher.THRESHOLD = float(threshold)
+            print(f"✅ [run_match] Threshold set to: {ItemMatcher.THRESHOLD}")
+            
             initialize_database()
+            print("🎯 [run_match] Matching algorithm executed successfully")
+
             return Response({"detail": "Matching process initiated."}, status=status.HTTP_200_OK)
+
         except Exception as e:
+            print(f"🔥 [run_match] Error occurred: {str(e)}")
             return Response({"detail": f"Error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
     @action(detail=True, methods=['patch'], url_path='update-status')
     def update_status(self, request, pk=None):
@@ -74,6 +86,12 @@ class LostFoundMatchView(viewsets.ModelViewSet):
         # Update this match's status
         match.status = new_status
         match.save()
+
+        Notification.objects.create(
+            recipient=match.found_item.user,
+            title="We have found a match",
+            message=f"Your item {match.lost_item.item.name}, {match.lost_item.item.serial_id} has been matched and we thing you are the potential owner.  To get your item, pass by the lost and found office as soon as possible.",
+        )
 
         # Delete other matches with the same found item but different ID
         deleted_count, _ = LostFoundMatch.objects.filter(

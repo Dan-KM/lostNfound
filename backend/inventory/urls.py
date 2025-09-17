@@ -9,6 +9,7 @@ from .views import (
     # ItemCreationViews,
     CategoryWithSubCategoryView,
     # sse_notifications,
+    ItemReportView
 )
 
 categoryRouter = DefaultRouter()
@@ -35,5 +36,6 @@ urlpatterns=[
     # path('create-item/', ItemCreationViews.as_view(), name='create-item'),
 
     # path("events/", sse_notifications),
+        path('item-report/', ItemReportView.as_view(), name='item-report'),
 
 ]

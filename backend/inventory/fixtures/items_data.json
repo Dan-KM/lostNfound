@@ -4,6 +4,7 @@
     "pk": 1,
     "fields": {
       "name": "iPhone 14 Pro",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Space Black, cracked screen protector",
       "item_image": null,
       "location": "Student Center food court",
@@ -22,6 +23,7 @@
     "pk": 2,
     "fields": {
       "name": "MacBook Pro 16-inch",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Silver laptop with university stickers",
       "item_image": null,
       "location": "Engineering building room 205",
@@ -40,6 +42,7 @@
     "pk": 3,
     "fields": {
       "name": "Black North Face Jacket",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Men's size M, fleece lined",
       "item_image": null,
       "location": "Gymnasium locker room",
@@ -58,6 +61,7 @@
     "pk": 4,
     "fields": {
       "name": "JanSport Backpack",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Navy blue with pink accents",
       "item_image": null,
       "location": "Library 3rd floor",
@@ -76,6 +80,7 @@
     "pk": 5,
     "fields": {
       "name": "Calculus Textbook",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Stewart's Calculus 8th edition",
       "item_image": null,
       "location": "Mathematics building classroom 101",
@@ -94,6 +99,7 @@
     "pk": 6,
     "fields": {
       "name": "House Keys",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Keychain with 4 keys and Toyota fob",
       "item_image": null,
       "location": "Campus parking lot B",
@@ -112,6 +118,7 @@
     "pk": 7,
     "fields": {
       "name": "Samsung Galaxy S22",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Phantom Black, no visible damage",
       "item_image": null,
       "location": "Library study carrel 12B",
@@ -129,6 +136,7 @@
     "pk": 8,
     "fields": {
       "name": "AirPods Pro",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "White charging case, left earbud missing",
       "item_image": null,
       "location": "Student Union building",
@@ -147,6 +155,7 @@
     "pk": 9,
     "fields": {
       "name": "Red Baseball Cap",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "University logo, adjustable strap",
       "item_image": null,
       "location": "Campus quad near fountain",
@@ -165,6 +174,7 @@
     "pk": 10,
     "fields": {
       "name": "Leather Wallet",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Brown leather, contains student ID",
       "item_image": null,
       "location": "Cafeteria table 15",
@@ -183,6 +193,7 @@
     "pk": 11,
     "fields": {
       "name": "Spiral Notebook",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Blue cover, chemistry notes inside",
       "item_image": null,
       "location": "Chemistry lab room 302",
@@ -201,6 +212,7 @@
     "pk": 12,
     "fields": {
       "name": "Basketball",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Spalding official size, slightly worn",
       "item_image": null,
       "location": "Outdoor basketball court",
@@ -219,6 +231,7 @@
     "pk": 13,
     "fields": {
       "name": "Stainless Steel Water Bottle",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "32oz Hydro Flask, dented on bottom",
       "item_image": null,
       "location": "Recreation center locker 45",
@@ -237,6 +250,7 @@
     "pk": 14,
     "fields": {
       "name": "Student ID Card",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "ID #12345678, expires 2026",
       "item_image": null,
       "location": "Library entrance",
@@ -255,6 +269,7 @@
     "pk": 15,
     "fields": {
       "name": "Silver Watch",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Casio digital watch, scratched face",
       "item_image": null,
       "location": "Physics lab bench 7",
@@ -273,6 +288,7 @@
     "pk": 16,
     "fields": {
       "name": "Black Umbrella",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Compact folding umbrella, handle missing",
       "item_image": null,
       "location": "Main entrance lobby",
@@ -291,6 +307,7 @@
     "pk": 17,
     "fields": {
       "name": "Prescription Glasses",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Black frames, progressive lenses",
       "item_image": null,
       "location": "Lecture hall C",
@@ -309,6 +326,7 @@
     "pk": 18,
     "fields": {
       "name": "USB Flash Drive",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "32GB SanDisk, blue casing",
       "item_image": null,
       "location": "Computer lab station 23",
@@ -327,6 +345,7 @@
     "pk": 19,
     "fields": {
       "name": "Gray Hoodie",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Size L, university logo on front",
       "item_image": null,
       "location": "Student lounge",
@@ -345,6 +364,7 @@
     "pk": 20,
     "fields": {
       "name": "Bike Lock",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Combination lock, 4 digits",
       "item_image": null,
       "location": "Bike rack near dormitory",
@@ -363,6 +383,7 @@
     "pk": 21,
     "fields": {
       "name": "iPad Air",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "64GB Wi-Fi model, rose gold",
       "item_image": null,
       "location": "Art studio room 105",
@@ -381,6 +402,7 @@
     "pk": 22,
     "fields": {
       "name": "iPhone Charger",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Lightning cable, 6ft white",
       "item_image": null,
       "location": "Dormitory common room",
@@ -399,6 +421,7 @@
     "pk": 23,
     "fields": {
       "name": "Scientific Calculator",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "TI-84 Plus, graphing calculator",
       "item_image": null,
       "location": "Mathematics building room 203",
@@ -417,6 +440,7 @@
     "pk": 24,
     "fields": {
       "name": "Apple Watch",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Series 8, 45mm, black sport band",
       "item_image": null,
       "location": "Fitness center treadmill area",
@@ -436,6 +460,7 @@
     "pk": 25,
     "fields": {
       "name": "Winter Scarf",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Red and white striped, wool blend",
       "item_image": null,
       "location": "Campus bookstore",
@@ -454,6 +479,7 @@
     "pk": 26,
     "fields": {
       "name": "Leather Gloves",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Brown leather, size M, lined",
       "item_image": null,
       "location": "Administration building lobby",
@@ -473,6 +499,7 @@
     "pk": 27,
     "fields": {
       "name": "Nike Running Shoes",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "White and blue, size 10, worn",
       "item_image": null,
       "location": "Track and field locker room",
@@ -492,6 +519,7 @@
     "pk": 28,
     "fields": {
       "name": "Wool Socks",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Pair of gray hiking socks",
       "item_image": null,
       "location": "Laundry room basement",
@@ -510,6 +538,7 @@
     "pk": 29,
     "fields": {
       "name": "Coach Purse",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Black leather handbag, silver hardware",
       "item_image": null,
       "location": "Women's restroom 2nd floor",
@@ -529,6 +558,7 @@
     "pk": 30,
     "fields": {
       "name": "Laptop Bag",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Targus 15-inch laptop case, black",
       "item_image": null,
       "location": "Computer science building room 301",
@@ -548,6 +578,7 @@
     "pk": 31,
     "fields": {
       "name": "Leather Belt",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Brown leather, size 34, silver buckle",
       "item_image": null,
       "location": "Gym changing room",
@@ -567,6 +598,7 @@
     "pk": 32,
     "fields": {
       "name": "Ray-Ban Sunglasses",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Aviator style, gold frames",
       "item_image": null,
       "location": "Outdoor seating area",
@@ -585,6 +617,7 @@
     "pk": 33,
     "fields": {
       "name": "Biology Textbook",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Campbell Biology 12th edition",
       "item_image": null,
       "location": "Biology lab room 150",
@@ -603,6 +636,7 @@
     "pk": 34,
     "fields": {
       "name": "Three-Ring Binder",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Blue 2-inch binder, history notes",
       "item_image": null,
       "location": "History building room 220",
@@ -621,6 +655,7 @@
     "pk": 35,
     "fields": {
       "name": "Mechanical Pencil Set",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Uni-ball Kuru Toga, 0.5mm, pack of 3",
       "item_image": null,
       "location": "Engineering lab bench 12",
@@ -640,6 +675,7 @@
     "pk": 36,
     "fields": {
       "name": "Yellow Highlighters",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Sharpie highlighters, pack of 4",
       "item_image": null,
       "location": "Library study room 4",
@@ -658,6 +694,7 @@
     "pk": 37,
     "fields": {
       "name": "Dorm Room Key",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Single key with room number 312B tag",
       "item_image": null,
       "location": "Dining hall table 8",
@@ -676,6 +713,7 @@
     "pk": 38,
     "fields": {
       "name": "Panda Keychain",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Small stuffed panda with keys attached",
       "item_image": null,
       "location": "Psychology building stairs",
@@ -694,6 +732,7 @@
     "pk": 39,
     "fields": {
       "name": "Makeup Bag",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Pink cosmetic pouch with various items",
       "item_image": null,
       "location": "Student center restroom",
@@ -712,6 +751,7 @@
     "pk": 40,
     "fields": {
       "name": "Tennis Racket",
+      "created_at": "2025-07-04T14:20:00Z",
       "description": "Wilson Pro Staff, slightly used",
       "item_image": null,
       "location": "Tennis courts bench",

@@ -37,7 +37,7 @@ class Item(models.Model):
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, null=True, blank=True)
     item_type = models.CharField(max_length=50, choices=ITEM_TYPE)
     other_details = models.JSONField(blank=True, null=True)
-    
+    created_at =  models.DateTimeField(auto_now=True)
     class Meta:
         unique_together = ('name', 'description')
         db_table = 'item'

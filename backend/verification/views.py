@@ -18,7 +18,7 @@ from rest_framework.decorators import action
 
 from rest_framework.permissions import IsAuthenticated
 
-
+from notification.models import Notification
 
 # Create your views here.
 
@@ -150,6 +150,12 @@ class VerificationQuestionViewSet(viewsets.ModelViewSet):
             if serializer.is_valid():
                 serializer.save()
                 response_data.append(serializer.data)
+
+                # Notification.objects.create(
+                #         recipient=request.user,
+                #         title="Item Submitted Successfully",
+                #         message=f"Your item '{item.name}' has been successfully submitted.",
+                #     )
             else:
                 errors.append({"id": q_id or "new", "errors": serializer.errors})
 
@@ -231,7 +237,6 @@ class VerificationAnswersView(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data)
 
-        # ✅ Add this for debugging
         print("Validation errors:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

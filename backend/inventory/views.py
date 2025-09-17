@@ -16,8 +16,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAdminUser
 from django_filters.rest_framework import DjangoFilterBackend
 
-
 from django.db import transaction
+
+from django.db.models import Count
+from collections import defaultdict
+from datetime import datetime
+from django.utils.timezone import make_aware
+from .serializers import ItemReportSerializer
 
 from notification.models import Notification
 
@@ -43,7 +48,6 @@ class CategoryWithSubCategoryView(viewsets.ReadOnlyModelViewSet):
     serializer_class = CategoryWithSubCategorySerializer
     lookup_field = 'pk'
     # permission_classes = [IsAuthenticated]
-    
 
 
 class ItemView(viewsets.ModelViewSet):
@@ -73,6 +77,14 @@ class ItemView(viewsets.ModelViewSet):
                     )
                     print("🟢 UserItem created:", user_item)
 
+                    # Create a notification for the item submission
+                    Notification.objects.create(
+                        recipient=request.user,
+                        title="Item Submitted Successfully",
+                        message=f"Your item '{item.name}' has been successfully submitted.",
+                    )
+                    print("🔔 Notification created for item submission")
+
                     user_item_serializer = UserItemSerializer(user_item)
                     print("📤 Returning serialized user item:", user_item_serializer.data)
 
@@ -89,6 +101,7 @@ class ItemView(viewsets.ModelViewSet):
             print("❌ Serializer is invalid")
             print("🧾 Errors:", serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class UserItemView(viewsets.ModelViewSet):
@@ -140,3 +153,46 @@ class UserItemView(viewsets.ModelViewSet):
             "status": user_item.status
         }, status=status.HTTP_200_OK)
     
+
+class ItemReportView(APIView):
+    def get(self, request):
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
+
+        # Validate dates
+        if not start_date or not end_date:
+            return Response({'detail': 'start_date and end_date are required.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            start = make_aware(datetime.fromisoformat(start_date))
+            end = make_aware(datetime.fromisoformat(end_date))
+        except ValueError:
+            return Response({'detail': 'Invalid date format. Use YYYY-MM-DD.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Query items
+        data = (
+            Item.objects
+            .filter(created_at__range=(start, end))
+            .values('subcategory__name', 'subcategory__category__name')
+            .annotate(total=Count('id'))
+            .filter(total__gt=0)
+        )
+
+        # Format report
+        report = defaultdict(dict)
+        for entry in data:
+            category = entry['subcategory__category__name']
+            subcategory = entry['subcategory__name']
+            total = entry['total']
+            report[category][subcategory] = total
+
+        # Convert to serializer-compatible structure
+        result = [
+            {'category': cat, 'subcategories': subs}
+            for cat, subs in report.items()
+        ]
+
+        serializer = ItemReportSerializer(result, many=True)
+        return Response(serializer.data)
